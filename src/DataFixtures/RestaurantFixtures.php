@@ -2,26 +2,65 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Beverage;
+use App\Entity\Dish;
 use App\Entity\Restaurant;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
 class RestaurantFixtures extends Fixture
 {
+    private $dishName;
     public function load(ObjectManager $manager)
     {
         $faker = \Faker\Factory::create();
         $faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($faker));
 
-        for($i=1;$i<=1000;$i++){
+        for($i=1;$i<=500;$i++){
             $fakeRestaurant = new Restaurant();
 
             $fakeRestaurant->setName($faker->company);
             $fakeRestaurant->setAddress($faker->address);
             $fakeRestaurant->setType($faker->sauceName());
 
-            $manager->persist($fakeRestaurant);
+
+            $dishNames = [];
+            for($j=1;$j<=rand(5,15);$j++){
+                $fakeDish = new Dish();
+
+                $this->dishName =$faker->foodName();
+                while(in_array($this->dishName, $dishNames)){
+                    $this->dishName = $faker->foodName();
+                }
+                $dishNames[] = $this->dishName;
+
+                $fakeDish->setName($this->dishName);
+                $fakeDish->setPrice(rand(8,20));
+
+                $fakeRestaurant->addDish($fakeDish);
+            }
+
+            $beverageNames = [];
+            for($p=1;$p<=rand(5,20);$p++){
+                $fakeBeverage = new Beverage();
+
+                $beverageName = $faker->beverageName();
+
+                while(in_array($beverageName, $beverageNames)){
+                    $beverageName = $faker->beverageName();
+                }
+
+                $fakeBeverage->setName($beverageName);
+                $beverageNames[] = $beverageName;
+
+                $fakeBeverage->setPrice(rand(8,20));
+
+                $fakeRestaurant->addBeverage($fakeBeverage);
+
+            }
             $manager->flush();
+
+            $manager->persist($fakeRestaurant);
 
         }
         // Generator
