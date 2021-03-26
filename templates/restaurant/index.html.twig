@@ -1,0 +1,15 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Restaurant index</h1>
+
+    <table>
+    {% for restaurant in restaurants %}
+        <tr>
+            <td>{{ restaurant.name }}</td>
+            <td>{{ restaurant.address }}</td>
+            <td>{{ restaurant.type }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
