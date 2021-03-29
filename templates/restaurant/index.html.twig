@@ -1,27 +1,44 @@
 {% extends "base.html.twig" %}
 
+{% block title %}Restaurant index{% endblock %}
+
 {% block body %}
     <h1>Restaurant index</h1>
 
-    <form class="col-5 my-2">
+    <form class=" my-2">
         <div class="input-group">
             <input
                     type="text"
-                    name="q"
+                    name="name"
                     class="form-control"
-                    value="{{ app.request.query.get('q') }}"
-                    placeholder="Recherche ..."
+                    value="{{ app.request.query.get('name') }}"
+                    placeholder="Recherche par nom ..."
             />
+            <input
+                    type="text"
+                    name="address"
+                    class="form-control"
+                    value="{{ app.request.query.get('address') }}"
+                    placeholder="Recherche par adresse ..."
+            />
+
+            <select name="nbresult" placeholder="List results" class="form-control">
+                {% for t in tab_show_results %}
+                    <option {% if t == nb_results_affiches %} selected {%  endif  %}>{{ t }}</option>
+                {%  endfor %}
+
+            </select>
             <button type="submit" class="btn btn-secondary">Recherche</button>
         </div>
     </form>
 
 
+    Total Restaurants trouvés : {{ restaurants.getTotalItemCount }}
     <table class="table">
         <tr>
-            <th>Restaurant</th>
-            <th>Address</th>
-            <th>Type</th>
+            <th>{{ knp_pagination_sortable(restaurants,'Restaurant', 'r.name')}} </th>
+            <th>{{ knp_pagination_sortable(restaurants,'Address', 'r.address')}}</th>
+            <th>{{ knp_pagination_sortable(restaurants,'Type', 'r.type')}}</th>
             <th class="text-center">Show</th>
         </tr>
     {% for restaurant in restaurants %}
@@ -36,4 +53,10 @@
         </tr>
     {% endfor %}
     </table>
+
+    <div class="text-center">
+        <div class="mx-auto ">
+            {{ knp_pagination_render(restaurants) }}
+        </div>
+    </div>
 {% endblock %}

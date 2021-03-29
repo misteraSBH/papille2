@@ -12,5 +12,5 @@
         {% endfor %}
     </table>
 
-    <a href="#" class="btn btn-primary">Add Beverage</a>
+    <a href="{{ path('app_restaurant_beverage_add', {id : restaurant.id}) }}" class="btn btn-primary">Add Beverage</a>
 {% endblock %}

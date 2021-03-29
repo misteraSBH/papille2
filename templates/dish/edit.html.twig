@@ -1,0 +1,10 @@
+{%  extends 'base.html.twig' %}
+
+{% block title %}Edit d'un Dish {% endblock %}
+{% block body %}
+    {{ form_start(monFormulaire,{'attr' : {novalidate: 'novalidate'}}) }}
+        {{ form_widget(monFormulaire) }}
+        <button type="submit" class="btn btn-primary">Editer</button>
+    {{ form_end(monFormulaire) }}
+
+{% endblock %}
