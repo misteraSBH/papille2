@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\BeverageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=BeverageRepository::class)
@@ -19,16 +21,24 @@ class Beverage
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Valid()
+     * @Assert\NotBlank()
+     * @Assert\Type("string")
      */
     private $name;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\NotBlank()
+     * @Assert\Type("numeric")
+     * @Assert\Positive()
+     *
      */
     private $price = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity=Restaurant::class, inversedBy="beverages")
+     * @Assert\Valid();
      */
     private $restaurant;
 

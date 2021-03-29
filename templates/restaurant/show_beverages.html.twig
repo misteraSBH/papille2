@@ -3,14 +3,19 @@
 {% block body %}
     <h1>Restaurant {{ restaurant.name }} - show beverages</h1>
 
+    <a href="{{ path('app_restaurant_beverage_add', {id : restaurant.id}) }}" class="btn btn-primary my-3">Add Beverage</a>
     <table class="table">
         {% for beverage in restaurant.beverages %}
             <tr>
                 <td>{{ beverage.name }}</td>
                 <td>{{ beverage.price }} €</td>
+                <td>
+                    <a href="{{ path("app_beverage_edit", {"id": beverage.id}) }}" class="btn btn-primary">Edit</a>
+                    <a href="{{ path("app_beverage_delete", {"id": beverage.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Delete ?')">Delete</a>
+                </td>
             </tr>
         {% endfor %}
     </table>
 
-    <a href="{{ path('app_restaurant_beverage_add', {id : restaurant.id}) }}" class="btn btn-primary">Add Beverage</a>
+
 {% endblock %}
