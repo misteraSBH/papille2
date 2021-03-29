@@ -20,10 +20,8 @@ class Beverage
     private $id;
 
     /**
+     * @Assert\NotBlank(message="Merci de renseigner un nom")
      * @ORM\Column(type="string", length=255)
-     * @Assert\Valid()
-     * @Assert\NotBlank()
-     * @Assert\Type("string")
      */
     private $name;
 
@@ -52,7 +50,7 @@ class Beverage
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->name = $name;
 

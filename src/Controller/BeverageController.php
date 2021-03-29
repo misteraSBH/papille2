@@ -32,9 +32,10 @@ class BeverageController extends AbstractController
             return $this->redirectToRoute("app_restaurant_beverages_show",  ["id"=> $beverage->getRestaurant()->getId()]);
         }
 
-        return $this->render('beverage/edit.html.twig', [
-            'monFormulaire'=>$form->createView(),
+        return $this->render('restaurant/add_beverage.html.twig', [
+            'form'=>$form->createView(),
             'beverage'=>$beverage,
+            'restaurant'=>$beverage->getRestaurant(),
         ]);
     }
 

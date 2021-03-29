@@ -53,7 +53,6 @@ a, a:hover, a:focus {
 
 #sidebar ul.components {
     padding: 20px 0;
-    border-bottom: 1px solid #47748b;
 }
 
 #sidebar ul p {
@@ -93,7 +92,7 @@ a[data-toggle="collapse"] {
     transform: translateY(-50%);
 }
 
-
+table{background-color: white}
 @media (max-width: 768px) {
     #sidebar {
         margin-left: -250px;

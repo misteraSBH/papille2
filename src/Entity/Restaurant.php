@@ -44,6 +44,11 @@ class Restaurant
      */
     private $beverages;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $picture;
+
     public function __construct()
     {
         $this->dishes = new ArrayCollection();
@@ -154,5 +159,17 @@ class Restaurant
     public function __toString()
     {
         return $this->getName();
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
+
+        return $this;
     }
 }

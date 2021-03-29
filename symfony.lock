@@ -118,6 +118,9 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.2.0"
     },
+    "monolog/monolog": {
+        "version": "2.2.0"
+    },
     "nikic/php-parser": {
         "version": "v4.10.4"
     },
@@ -255,6 +258,27 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/mime": {
+        "version": "v5.2.6"
+    },
+    "symfony/monolog-bridge": {
+        "version": "v5.2.5"
+    },
+    "symfony/monolog-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "d7249f7d560f6736115eee1851d02a65826f0a56"
+        },
+        "files": [
+            "config/packages/dev/monolog.yaml",
+            "config/packages/prod/deprecations.yaml",
+            "config/packages/prod/monolog.yaml",
+            "config/packages/test/monolog.yaml"
+        ]
+    },
     "symfony/options-resolver": {
         "version": "v5.2.4"
     },
@@ -265,6 +289,9 @@
         "version": "v1.22.1"
     },
     "symfony/polyfill-intl-icu": {
+        "version": "v1.22.1"
+    },
+    "symfony/polyfill-intl-idn": {
         "version": "v1.22.1"
     },
     "symfony/polyfill-intl-normalizer": {

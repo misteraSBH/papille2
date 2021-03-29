@@ -7,6 +7,8 @@ use App\Entity\Dish;
 use App\Entity\Restaurant;
 use App\Form\BeverageType;
 use App\Form\DishType;
+use App\Form\RestaurantType;
+use App\Service\ImageUploaderHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -135,6 +137,39 @@ class RestaurantController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/restaurant/{id}/edit", name="app_restaurant_edit")
+     */
+    public function edit(int $id, Restaurant $restaurant, EntityManagerInterface $entityManager, Request $request, ImageUploaderHelper $fileUploader): Response
+    {
+        $form = $this->createForm(RestaurantType::class, $restaurant);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            /**@var $restaurant Restaurant */
+            $restaurant = $form->getData();
+
+            $uploadedFile = $form->get('picture')->getData();
+
+            if($uploadedFile) {
+
+                $fileName = $fileUploader->upload($uploadedFile);
+
+                $restaurant->setPicture($fileName);
+            }
+
+            $entityManager->persist($restaurant);
+            $entityManager->flush();
+
+            return $this->redirectToRoute("app_restaurant_beverages_show",  ["id"=> $id]);
+        }
+
+        return $this->render('restaurant/edit.html.twig', [
+            'form'=>$form->createView(),
+            'restaurant'=>$restaurant,
+        ]);
+    }
 
 
 }

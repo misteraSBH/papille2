@@ -10,8 +10,8 @@
                 <td>{{ beverage.name }}</td>
                 <td>{{ beverage.price }} €</td>
                 <td>
-                    <a href="{{ path("app_beverage_edit", {"id": beverage.id}) }}" class="btn btn-primary">Edit</a>
-                    <a href="{{ path("app_beverage_delete", {"id": beverage.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Delete ?')">Delete</a>
+                    <a href="{{ path("app_beverage_edit", {"id": beverage.id}) }}" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="{{ path("app_beverage_delete", {"id": beverage.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Delete ?')"><i class="fa fa-trash-alt"></i></a>
                 </td>
             </tr>
         {% endfor %}
