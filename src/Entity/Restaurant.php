@@ -49,10 +49,16 @@ class Restaurant
      */
     private $picture;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Dessert::class, mappedBy="restaurant")
+     */
+    private $desserts;
+
     public function __construct()
     {
         $this->dishes = new ArrayCollection();
         $this->beverages = new ArrayCollection();
+        $this->desserts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,6 +175,36 @@ class Restaurant
     public function setPicture(?string $picture): self
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Dessert[]
+     */
+    public function getDesserts(): Collection
+    {
+        return $this->desserts;
+    }
+
+    public function addDessert(Dessert $dessert): self
+    {
+        if (!$this->desserts->contains($dessert)) {
+            $this->desserts[] = $dessert;
+            $dessert->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDessert(Dessert $dessert): self
+    {
+        if ($this->desserts->removeElement($dessert)) {
+            // set the owning side to null (unless already changed)
+            if ($dessert->getRestaurant() === $this) {
+                $dessert->setRestaurant(null);
+            }
+        }
 
         return $this;
     }

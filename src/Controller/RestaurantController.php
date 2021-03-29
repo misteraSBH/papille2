@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Beverage;
+use App\Entity\Dessert;
 use App\Entity\Dish;
 use App\Entity\Restaurant;
 use App\Form\BeverageType;
@@ -171,5 +172,17 @@ class RestaurantController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/restaurant/{id}/show_dessert", name="app_restaurant_dessert_show")
+     */
+    public function showDessert(int $id,EntityManagerInterface $entityManager):Response
+    {
 
+        $restaurantRepository = $entityManager->getRepository(Restaurant::class);
+        $restaurant = $restaurantRepository->find($id);
+
+        return $this->render("restaurant/show_desserts.html.twig",[
+            'restaurant' => $restaurant,
+        ]);
+    }
 }

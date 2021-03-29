@@ -15,6 +15,7 @@ class RestaurantFixtures extends Fixture
     {
         $faker = \Faker\Factory::create();
         $faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($faker));
+        $faker->addProvider(new \Faker\Provider\Lorem($faker));
 
         for($i=1;$i<=500;$i++){
             $fakeRestaurant = new Restaurant();
@@ -58,6 +59,29 @@ class RestaurantFixtures extends Fixture
                 $fakeRestaurant->addBeverage($fakeBeverage);
 
             }
+
+
+            $dessertNames = [];
+            for($k=1;$k<=rand(3,5);$k++){
+                $fakeDessert = new Dessert();
+
+                $dessertName = $faker->fruitName();
+
+                while(in_array($dessertName, $dessertNames)){
+                    $dessertName = $faker->fruitName();
+                }
+
+                $fakeDessert->setName($dessertName);
+                $dessertNames[] = $dessertName;
+
+                $fakeDessert->setPrice(rand(4,11));
+                $fakeDessert->setDescription($faker->text(100));
+
+                $fakeRestaurant->addDessert($fakeDessert);
+
+            }
+
+
             $manager->flush();
 
             $manager->persist($fakeRestaurant);
