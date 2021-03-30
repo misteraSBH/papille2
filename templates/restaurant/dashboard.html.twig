@@ -1,0 +1,30 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Restaurant dashboard{% endblock %}
+
+{% block body %}
+    <h1>Restaurant index </h1>
+
+
+    <table class="table">
+
+    {% for restaurant in restaurants %}
+        <tr>
+            <td> {{ restaurant.name }} </td>
+            <td>{{ restaurant.address }}</td>
+            <td>{{ restaurant.type }}</td>
+            <td>{% if restaurant.user is not null %} {{ restaurant.user.email }} {% endif  %}</td>
+            <td class="text-center">
+                <a href="{{ path('app_restaurant_dishes_show',{'id': restaurant.id}) }}" class="btn btn-primary my-1"><i class="fa fa-french-fries"></i></a>
+                <a href="{{ path('app_restaurant_beverages_show',{'id': restaurant.id}) }}" class="btn btn-primary my-1"><i class="fa fa-coffee-togo"></i></a>
+                <a href="{{ path('app_restaurant_dessert_show',{'id': restaurant.id}) }}" class="btn btn-primary my-1"><i class="fa fa-ice-cream"></i></a>
+            </td>
+            <td>
+                <a href="{{ path('app_restaurant_edit',{'id': restaurant.id}) }}" class="btn btn-primary my-1"><i class="fa fa-pencil-alt"></i></a>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+
+
+{% endblock %}

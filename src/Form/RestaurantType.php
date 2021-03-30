@@ -16,6 +16,7 @@ class RestaurantType extends AbstractType
             ->add('name')
             ->add('address')
             ->add('type')
+            ->add('user')
             ->add('picture', FileType::class, [
                 "mapped"=>false,
             ])

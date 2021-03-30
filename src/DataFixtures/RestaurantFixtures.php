@@ -6,12 +6,21 @@ use App\Entity\Beverage;
 use App\Entity\Dessert;
 use App\Entity\Dish;
 use App\Entity\Restaurant;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RestaurantFixtures extends Fixture
 {
     private $dishName;
+
+    private $passwordEncoder;
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
+
     public function load(ObjectManager $manager)
     {
         $faker = \Faker\Factory::create();
@@ -24,6 +33,20 @@ class RestaurantFixtures extends Fixture
             $fakeRestaurant->setName($faker->company);
             $fakeRestaurant->setAddress($faker->address);
             $fakeRestaurant->setType($faker->sauceName());
+
+
+
+            $owner = new User();
+            $owner->setEmail("resto".$i."@test.com");
+            $owner->setPassword($this->passwordEncoder->encodePassword($owner,"123"));
+
+            $owner->setRoles(["ROLE_RESTAURANT_OWNER"]);
+            if($i==3){
+                $owner->setRoles(["ROLE_SUPER_ADMIN"]);
+            }
+            $fakeRestaurant->setUser($owner);
+
+
 
 
             $dishNames = [];

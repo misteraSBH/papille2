@@ -6,22 +6,39 @@ use App\Entity\Beverage;
 use App\Entity\Dessert;
 use App\Entity\Dish;
 use App\Entity\Restaurant;
+use App\Entity\User;
 use App\Form\BeverageType;
 use App\Form\DessertType;
 use App\Form\DishType;
 use App\Form\RestaurantType;
+use App\Repository\RestaurantRepository;
 use App\Service\ImageUploaderHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class RestaurantController
+ * @IsGranted("ROLE_RESTAURANT_OWNER")
+ */
+
 class RestaurantController extends AbstractController
 {
     /**
+     * @Route("/", name="root")
+     */
+    public function indexroot(){
+        return $this->redirectToRoute("restaurant");
+    }
+
+
+    /**
      * @Route("/restaurant", name="restaurant")
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function index(Request $request, PaginatorInterface $paginator): Response
     {
@@ -143,6 +160,12 @@ class RestaurantController extends AbstractController
      */
     public function edit(int $id, Restaurant $restaurant, EntityManagerInterface $entityManager, Request $request, ImageUploaderHelper $fileUploader): Response
     {
+
+        /*if($restaurant->getUser() != $this->getUser()){
+            throw new \Exception('Vilain');
+        }*/
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
         $form = $this->createForm(RestaurantType::class, $restaurant);
         $form->handleRequest($request);
 
@@ -171,6 +194,8 @@ class RestaurantController extends AbstractController
             'restaurant'=>$restaurant,
         ]);
     }
+
+
 
     /**
      * @Route("/restaurant/{id}/show_dessert", name="app_restaurant_dessert_show")
@@ -215,7 +240,7 @@ class RestaurantController extends AbstractController
     /**
      * @Route("/restaurant/{id}/edit_dessert", name="app_restaurant_dessert_edit")
      */
-    public function editDessert(int $id, Dessert $dessert, EntityManagerInterface $entityManager, Request $request): Response
+    public function editDessert(int $id, Dessert $dessert, EntityManagerInterface $entityManager, Request $request, RestaurantRepository $restaurantRepository): Response
     {
         $form = $this->createForm(DessertType::class, $dessert);
         $form->handleRequest($request);
@@ -247,5 +272,27 @@ class RestaurantController extends AbstractController
         return $this->redirectToRoute("app_restaurant_dessert_show",  ["id"=> $dessert->getRestaurant()->getId()]);
     }
 
+    /**
+     * @Route("/restaurant/dashboard", name="app_restaurant_dashboard")
+     */
+    public function dashboard(): Response
+    {
+        #$this->getUser()->getRestaurant()->count();
+        $restaurants = $this->getUser()->getRestaurant();
 
+        return $this->render('restaurant/dashboard.html.twig', [
+            'restaurants'=>$restaurants,
+        ]);
+    }
+
+
+    /**
+     * @Route("/restaurant/{id}/delete", name="app_restaurant_delete")
+     */
+    public function delete(int $id, Restaurant $restaurant): Response
+    {
+        $this->denyAccessUnlessGranted("DELETE_RESTAURANT", $restaurant);
+
+        return new Response("Coucou super admin");
+    }
 }

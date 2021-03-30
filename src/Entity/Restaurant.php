@@ -6,6 +6,7 @@ use App\Repository\RestaurantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 /**
  * @ORM\Entity(repositoryClass=RestaurantRepository::class)
@@ -53,6 +54,11 @@ class Restaurant
      * @ORM\OneToMany(targetEntity=Dessert::class, mappedBy="restaurant", cascade="persist")
      */
     private $desserts;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="restaurant", cascade="persist")
+     */
+    private $user;
 
     public function __construct()
     {
@@ -205,6 +211,18 @@ class Restaurant
                 $dessert->setRestaurant(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
