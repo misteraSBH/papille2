@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Beverage;
+use App\Entity\Dessert;
 use App\Entity\Dish;
 use App\Entity\Restaurant;
 use Doctrine\Bundle\FixturesBundle\Fixture;

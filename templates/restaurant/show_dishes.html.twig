@@ -3,7 +3,7 @@
 {% block body %}
     <h1>Restaurant {{ restaurant.name }} - show dishes</h1>
 
-    <a href="{{ path("app_restaurant_dish_add", {"id": restaurant.id}) }}" class="btn btn-primary my-3">Create Dish</a>
+    <a href="{{ path("app_restaurant_dessert_add", {"id": restaurant.id}) }}" class="btn btn-primary my-3">Create Dish</a>
     <table class="table">
         {% for dish in restaurant.dishes %}
             <tr>

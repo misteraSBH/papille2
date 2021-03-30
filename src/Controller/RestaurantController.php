@@ -7,10 +7,10 @@ use App\Entity\Dessert;
 use App\Entity\Dish;
 use App\Entity\Restaurant;
 use App\Form\BeverageType;
+use App\Form\DessertType;
 use App\Form\DishType;
 use App\Form\RestaurantType;
 use App\Service\ImageUploaderHelper;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -185,4 +185,67 @@ class RestaurantController extends AbstractController
             'restaurant' => $restaurant,
         ]);
     }
+
+    /**
+     * @Route("/restaurant/{id}/add_dessert", name="app_restaurant_dessert_add")
+     */
+    public function addDessert(int $id, Restaurant $restaurant, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $form = $this->createForm(DessertType::class);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /**@var $dessert Dessert */
+            $dessert = $form->getData();
+            $restaurant->addDessert($dessert);
+
+            $entityManager->persist($dessert);
+            $entityManager->flush();
+
+            return $this->redirectToRoute("app_restaurant_dessert_show",  ["id"=> $id]);
+        }
+
+        return $this->render('restaurant/add_dessert.html.twig', [
+            'restaurant' => $restaurant,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
+    /**
+     * @Route("/restaurant/{id}/edit_dessert", name="app_restaurant_dessert_edit")
+     */
+    public function editDessert(int $id, Dessert $dessert, EntityManagerInterface $entityManager, Request $request): Response
+    {
+        $form = $this->createForm(DessertType::class, $dessert);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /**@var $dessert Dessert */
+            $dessert = $form->getData();
+
+            $entityManager->persist($dessert);
+            $entityManager->flush();
+
+            return $this->redirectToRoute("app_restaurant_dessert_show",  ["id"=> $dessert->getRestaurant()->getId()]);
+        }
+
+        return $this->render('dish/edit.html.twig', [
+            'monFormulaire'=>$form->createView(),
+            'dessert'=>$dessert,
+        ]);
+    }
+
+    /**
+     * @Route("/restaurant/{id}/delete_dessert", name="app_restaurant_dessert_delete")
+     */
+    public function deleteDessert(int $id, Dessert $dessert, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($dessert);
+        $entityManager->flush();
+
+        return $this->redirectToRoute("app_restaurant_dessert_show",  ["id"=> $dessert->getRestaurant()->getId()]);
+    }
+
+
 }

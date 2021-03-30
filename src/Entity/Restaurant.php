@@ -50,7 +50,7 @@ class Restaurant
     private $picture;
 
     /**
-     * @ORM\OneToMany(targetEntity=Dessert::class, mappedBy="restaurant")
+     * @ORM\OneToMany(targetEntity=Dessert::class, mappedBy="restaurant", cascade="persist")
      */
     private $desserts;
 

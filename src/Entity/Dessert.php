@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\DessertRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=DessertRepository::class)
@@ -19,16 +20,21 @@ class Dessert
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull()
      */
     private $name;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     * @Assert\NotBlank()
+     * @Assert\Type("numeric")
+     * @Assert\Positive()
      */
     private $price;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\Type("string")
      */
     private $description;
 

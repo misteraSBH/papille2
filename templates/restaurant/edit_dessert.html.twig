@@ -1,0 +1,10 @@
+{%  extends 'base.html.twig' %}
+
+{% block title %}Edit Dessert {% endblock %}
+{% block body %}
+    {{ form_start(monFormulaire,{'attr' : {novalidate: 'novalidate'}}) }}
+        {{ form_widget(monFormulaire) }}
+        <button type="submit" class="btn btn-primary">Edit</button>
+    {{ form_end(monFormulaire) }}
+
+{% endblock %}
