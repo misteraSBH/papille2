@@ -1,7 +1,7 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <h1>Restaurant {{ restaurant.name }} - show menus</h1>
+    <h1>Restaurant - show menus</h1>
 
     <a href="{{ path("app_restaurant_menurestaurant_add", {"id": restaurant.id}) }}" class="btn btn-primary my-3">Create Menu</a>
     <table class="table">

@@ -2,9 +2,10 @@
 
 {% block title %}Edit d'un Restaurant {% endblock %}
 {% block body %}
+    <h1>Restaurant Edit</h1>
     {{ form_start(form,{'attr' : {novalidate: 'novalidate'}}) }}
         {{ form_widget(form) }}
-        <button type="submit" class="btn btn-primary">Editer</button>
+        <button type="submit" class="btn btn-primary">Edit</button>
     {{ form_end(form) }}
 
 {% endblock %}
