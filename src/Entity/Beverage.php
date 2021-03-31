@@ -40,6 +40,7 @@ class Beverage
      */
     private $restaurant;
 
+
     public function getId(): ?int
     {
         return $this->id;
@@ -80,4 +81,6 @@ class Beverage
 
         return $this;
     }
+
+
 }

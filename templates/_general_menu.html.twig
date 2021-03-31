@@ -1,0 +1,39 @@
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <h3>Les Exos de Lolo</h3>
+    </div>
+
+    <ul class="list-unstyled components">
+
+        {% if is_granted("ROLE_RESTAURANT_OWNER") or is_granted("ROLE_SUPER_ADMIN") %}
+            <li class="text-center bg-dark py-2">
+                {{ app.user.email }}
+            </li>
+        {% endif %}
+
+        {% if is_granted("ROLE_RESTAURANT_OWNER") %}
+            <li>
+                <a href="{{ path('app_restaurant_dashboard') }}"> Dashboard</a>
+            </li>
+        {% endif %}
+
+        {% if is_granted("ROLE_SUPER_ADMIN")  %}
+            <li>
+                <a href="{{ path('restaurant') }}">Liste Restaurants</a>
+            </li>
+        {% endif %}
+
+        {% if is_granted("ROLE_RESTAURANT_OWNER") or is_granted("ROLE_SUPER_ADMIN") %}
+            <li>
+                <a href="{{ path('app_logout') }}">Logout</a>
+            </li>
+        {% else  %}
+            <li>
+                <a href="{{ path('app_login') }}">Login</a>
+            </li>
+        {% endif %}
+
+
+
+    </ul>
+</nav>

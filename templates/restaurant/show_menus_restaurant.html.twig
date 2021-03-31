@@ -1,0 +1,34 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Restaurant {{ restaurant.name }} - show menus</h1>
+
+    <a href="{{ path("app_restaurant_menurestaurant_add", {"id": restaurant.id}) }}" class="btn btn-primary my-3">Create Menu</a>
+    <table class="table">
+        {% for menu in restaurant.menusrestaurant %}
+            <tr class="bg-dark text-white">
+                <td><h2>{{ menu.name }}</h2></td>
+                <td></td>
+                <td>
+                    <a href="{{ path("app_restaurant_menurestaurant_edit", {"id": restaurant.id,"idmenurestaurant": menu.id }) }}" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="{{ path("app_restaurant_menurestaurant_delete", {"id": restaurant.id,"idmenurestaurant": menu.id }) }}" class="btn btn-danger ml-2" onclick="return confirm('Delete ?')"><i class="fa fa-trash-alt"></i></a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <ul>
+                    {% for dish in menu.dishes %}
+                        <li>{{ dish.name }}</li>
+                    {% endfor %}
+                    </ul>
+                </td>
+                <td>
+
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

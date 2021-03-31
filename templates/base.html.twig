@@ -30,24 +30,11 @@
     <body>
         <div class="wrapper">
 
-            <nav id="sidebar">
-                <div class="sidebar-header">
-                    <h3>Les Exos de Lolo</h3>
-                </div>
+            {% block sidebar %}
 
-                <ul class="list-unstyled components">
+                {{ include('_general_menu.html.twig') }}
 
-                    <li>
-                        <a href="{{ path('app_login') }}">Login</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('app_logout') }}">Logout</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('restaurant') }}">Restaurants</a>
-                    </li>
-                </ul>
-            </nav>
+            {% endblock %}
 
             <div class="content">
                 <nav class="navbar navbar-expand-lg navbar-light bg-light">

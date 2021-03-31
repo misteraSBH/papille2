@@ -15,6 +15,7 @@
             <td>{{ restaurant.type }}</td>
             <td>{% if restaurant.user is not null %} {{ restaurant.user.email }} {% endif  %}</td>
             <td class="text-center">
+                <a href="{{ path('app_restaurant_menurestaurant_show',{'id': restaurant.id}) }}" class="btn btn-primary my-1"><i class="fa fa-file-alt"></i></a>
                 <a href="{{ path('app_restaurant_dishes_show',{'id': restaurant.id}) }}" class="btn btn-primary my-1"><i class="fa fa-french-fries"></i></a>
                 <a href="{{ path('app_restaurant_beverages_show',{'id': restaurant.id}) }}" class="btn btn-primary my-1"><i class="fa fa-coffee-togo"></i></a>
                 <a href="{{ path('app_restaurant_dessert_show',{'id': restaurant.id}) }}" class="btn btn-primary my-1"><i class="fa fa-ice-cream"></i></a>

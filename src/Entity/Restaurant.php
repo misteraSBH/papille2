@@ -60,11 +60,17 @@ class Restaurant
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity=MenuRestaurant::class, mappedBy="restaurant")
+     */
+    private $menusrestaurant;
+
     public function __construct()
     {
         $this->dishes = new ArrayCollection();
         $this->beverages = new ArrayCollection();
         $this->desserts = new ArrayCollection();
+        $this->menusrestaurant = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -223,6 +229,36 @@ class Restaurant
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|MenuRestaurant[]
+     */
+    public function getMenusrestaurant(): Collection
+    {
+        return $this->menusrestaurant;
+    }
+
+    public function addMenusrestaurant(MenuRestaurant $menusrestaurant): self
+    {
+        if (!$this->menusrestaurant->contains($menusrestaurant)) {
+            $this->menusrestaurant[] = $menusrestaurant;
+            $menusrestaurant->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMenusrestaurant(MenuRestaurant $menusrestaurant): self
+    {
+        if ($this->menusrestaurant->removeElement($menusrestaurant)) {
+            // set the owning side to null (unless already changed)
+            if ($menusrestaurant->getRestaurant() === $this) {
+                $menusrestaurant->setRestaurant(null);
+            }
+        }
 
         return $this;
     }

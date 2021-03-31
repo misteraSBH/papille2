@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\DishRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -38,6 +40,16 @@ class Dish
      * @Assert\Valid();
      */
     private $restaurant;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=MenuRestaurant::class, mappedBy="dishes")
+     */
+    private $menuRestaurants;
+
+    public function __construct()
+    {
+        $this->menuRestaurants = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -83,5 +95,32 @@ class Dish
     public function __toString()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection|MenuRestaurant[]
+     */
+    public function getMenuRestaurants(): Collection
+    {
+        return $this->menuRestaurants;
+    }
+
+    public function addMenuRestaurant(MenuRestaurant $menuRestaurant): self
+    {
+        if (!$this->menuRestaurants->contains($menuRestaurant)) {
+            $this->menuRestaurants[] = $menuRestaurant;
+            $menuRestaurant->addDish($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMenuRestaurant(MenuRestaurant $menuRestaurant): self
+    {
+        if ($this->menuRestaurants->removeElement($menuRestaurant)) {
+            $menuRestaurant->removeDish($this);
+        }
+
+        return $this;
     }
 }

@@ -5,14 +5,18 @@ namespace App\Controller;
 use App\Entity\Beverage;
 use App\Entity\Dessert;
 use App\Entity\Dish;
+use App\Entity\MenuRestaurant;
 use App\Entity\Restaurant;
 use App\Entity\User;
 use App\Form\BeverageType;
 use App\Form\DessertType;
 use App\Form\DishType;
+use App\Form\MenuRestaurantType;
 use App\Form\RestaurantType;
+use App\Repository\MenuRestaurantRepository;
 use App\Repository\RestaurantRepository;
 use App\Service\ImageUploaderHelper;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -77,6 +81,8 @@ class RestaurantController extends AbstractController
         $restaurantRepository = $entityManager->getRepository(Restaurant::class);
         $restaurant = $restaurantRepository->find($id);
 
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
         return $this->render("restaurant/show_dishes.html.twig",[
             'restaurant' => $restaurant,
         ]);
@@ -92,6 +98,8 @@ class RestaurantController extends AbstractController
         $restaurantRepository = $entityManager->getRepository(Restaurant::class);
         $restaurant = $restaurantRepository->find($id);
 
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
         return $this->render("restaurant/show_beverages.html.twig",[
             'restaurant' => $restaurant,
         ]);
@@ -103,6 +111,7 @@ class RestaurantController extends AbstractController
      */
     public function addDish(Request $request, int $id, Restaurant $restaurant, EntityManagerInterface $entityManager):Response
     {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
 
         $dishForm = $this->createForm(DishType::class);
         $dishForm->handleRequest($request);
@@ -132,6 +141,8 @@ class RestaurantController extends AbstractController
      */
     public function addBeverage(Request $request, int $id, Restaurant $restaurant, EntityManagerInterface $entityManager):Response
     {
+
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
 
         $beverageForm = $this->createForm(BeverageType::class);
         $beverageForm->handleRequest($request);
@@ -205,6 +216,7 @@ class RestaurantController extends AbstractController
 
         $restaurantRepository = $entityManager->getRepository(Restaurant::class);
         $restaurant = $restaurantRepository->find($id);
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
 
         return $this->render("restaurant/show_desserts.html.twig",[
             'restaurant' => $restaurant,
@@ -216,6 +228,8 @@ class RestaurantController extends AbstractController
      */
     public function addDessert(int $id, Restaurant $restaurant, EntityManagerInterface $entityManager, Request $request): Response
     {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
         $form = $this->createForm(DessertType::class);
         $form->handleRequest($request);
 
@@ -242,6 +256,8 @@ class RestaurantController extends AbstractController
      */
     public function editDessert(int $id, Dessert $dessert, EntityManagerInterface $entityManager, Request $request, RestaurantRepository $restaurantRepository): Response
     {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
         $form = $this->createForm(DessertType::class, $dessert);
         $form->handleRequest($request);
 
@@ -295,4 +311,102 @@ class RestaurantController extends AbstractController
 
         return new Response("Coucou super admin");
     }
+
+    # -----------------
+    # MenuRestaurant
+    # -----------------
+
+    /**
+     * @Route("/restaurant/{id}/show_menurestaurant", name="app_restaurant_menurestaurant_show")
+     */
+    public function showMenuRestaurant(int $id, Restaurant $restaurant):Response
+    {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        $restaurant->getMenusrestaurant();
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        return $this->render("restaurant/show_menus_restaurant.html.twig",[
+            'restaurant' => $restaurant,
+        ]);
+
+    }
+
+
+    /**
+     * @Route("/restaurant/{id}/add_menurestaurant", name="app_restaurant_menurestaurant_add")
+     */
+    public function addMenuRestaurant(int $id, Restaurant $restaurant, EntityManagerInterface $entityManager, Request $request):Response
+    {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        $menurestaurant = new MenuRestaurant();
+        $menurestaurant->setRestaurant($restaurant);
+
+        $form = $this->createForm(MenuRestaurantType::class, $menurestaurant);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /**@var $menurestaurant MenuRestaurant */
+            $menurestaurant = $form->getData();
+            $restaurant->addMenusrestaurant($menurestaurant);
+
+            $entityManager->persist($menurestaurant);
+            $entityManager->flush();
+
+            return $this->redirectToRoute("app_restaurant_menurestaurant_show",  ["id"=> $id]);
+        }
+
+        return $this->render('restaurant/add_menu_restaurant.html.twig', [
+            'restaurant' => $restaurant,
+            'form' => $form->createView(),
+        ]);
+
+    }
+
+    /**
+     * @Route("/restaurant/{id}/edit_menurestaurant/{idmenurestaurant}", name="app_restaurant_menurestaurant_edit")
+     */
+    public function editMenuRestaurant(int $id, int $idmenurestaurant,Restaurant $restaurant, EntityManagerInterface $entityManager, Request $request, MenuRestaurantRepository $menuRestaurantRepository): Response
+    {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        $menuRestaurant = $menuRestaurantRepository->find($idmenurestaurant);
+
+        $form = $this->createForm(MenuRestaurantType::class, $menuRestaurant);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            //dd( $form->get('dishes')->getData());
+            /**@var $menuRestaurant MenuRestaurant */
+
+            $menuRestaurant = $form->getData();
+
+            $entityManager->persist($menuRestaurant);
+            $entityManager->flush();
+
+            return $this->redirectToRoute("app_restaurant_menurestaurant_show",  ["id"=> $id]);
+        }
+
+        return $this->render('restaurant/edit_menu_restaurant.html.twig', [
+            'monFormulaire'=>$form->createView(),
+            'menuRestaurant'=>$menuRestaurant,
+        ]);
+    }
+
+    /**
+     * @Route("/restaurant/{id}/delete_menurestaurant/{idmenurestaurant}", name="app_restaurant_menurestaurant_delete")
+     */
+    public function deleteMenuRestaurant(int $id, int $idmenurestaurant, Restaurant $restaurant, EntityManagerInterface $entityManager, MenuRestaurantRepository $menuRestaurantRepository): Response
+    {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        $menuRestaurant = $menuRestaurantRepository->find($idmenurestaurant);
+
+        $entityManager->remove($menuRestaurant);
+        $entityManager->flush();
+
+        return $this->redirectToRoute("app_restaurant_menurestaurant_show",  ["id"=> $id]);
+    }
 }
+
