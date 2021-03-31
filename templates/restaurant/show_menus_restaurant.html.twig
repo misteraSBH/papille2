@@ -7,15 +7,16 @@
     <table class="table">
         {% for menu in restaurant.menusrestaurant %}
             <tr class="bg-dark text-white">
-                <td><h2>{{ menu.name }}</h2></td>
-                <td></td>
-                <td>
+                <th>{{ menu.name }}</th>
+                <th> - </th>
+                <th>
                     <a href="{{ path("app_restaurant_menurestaurant_edit", {"id": restaurant.id,"idmenurestaurant": menu.id }) }}" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
                     <a href="{{ path("app_restaurant_menurestaurant_delete", {"id": restaurant.id,"idmenurestaurant": menu.id }) }}" class="btn btn-danger ml-2" onclick="return confirm('Delete ?')"><i class="fa fa-trash-alt"></i></a>
-                </td>
+                </th>
             </tr>
             <tr>
                 <td>
+                    <p class="font-weight-bold">DISHES</p>
                     <ul>
                     {% for dish in menu.dishes %}
                         <li>{{ dish.name }}</li>
@@ -23,9 +24,21 @@
                     </ul>
                 </td>
                 <td>
+                    <p class="font-weight-bold">BEVERAGES</p>
+                    <ul>
+                        {% for beverage in menu.beverages %}
+                            <li>{{ beverage.name }}</li>
+                        {% endfor %}
+                    </ul>
 
                 </td>
                 <td>
+                    <p class="font-weight-bold">DESSERTS</p>
+                    <ul>
+                        {% for dessert in menu.desserts %}
+                            <li>{{ dessert.name }}</li>
+                        {% endfor %}
+                    </ul>
 
                 </td>
             </tr>

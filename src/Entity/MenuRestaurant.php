@@ -35,6 +35,16 @@ class MenuRestaurant
      */
     private $restaurant;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Beverage::class, inversedBy="menuRestaurants")
+     */
+    private $beverages;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Dessert::class, inversedBy="menuRestaurants")
+     */
+    private $desserts;
+
 
 
     public function __construct()
@@ -82,6 +92,58 @@ class MenuRestaurant
 
         return $this;
     }
+
+    /**
+     * @return Collection|Beverage[]
+     */
+    public function getBeverages(): Collection
+    {
+        return $this->beverages;
+    }
+
+    public function addBeverage(Beverage $beverage): self
+    {
+        if (!$this->beverages->contains($beverage)) {
+            $this->beverages[] = $beverage;
+        }
+
+        return $this;
+    }
+
+    public function removeBeverage(Beverage $beverage): self
+    {
+        $this->beverages->removeElement($beverage);
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|Dessert[]
+     */
+    public function getDesserts(): Collection
+    {
+        return $this->desserts;
+    }
+
+    public function addDessert(Dessert $dessert): self
+    {
+        if (!$this->desserts->contains($dessert)) {
+            $this->desserts[] = $dessert;
+        }
+
+        return $this;
+    }
+
+    public function removeDessert(Dessert $dessert): self
+    {
+        $this->desserts->removeElement($dessert);
+
+        return $this;
+    }
+
+
+
 
     public function getRestaurant(): ?Restaurant
     {

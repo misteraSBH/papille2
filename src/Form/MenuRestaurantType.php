@@ -2,6 +2,8 @@
 
 namespace App\Form;
 
+use App\Entity\Beverage;
+use App\Entity\Dessert;
 use App\Entity\Dish;
 use App\Entity\MenuRestaurant;
 use Doctrine\ORM\EntityRepository;
@@ -17,6 +19,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 class MenuRestaurantType extends AbstractType
 {
     private $currentDishes =[];
+    private $currentBeverages =[];
+    private $currentDesserts =[];
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -24,11 +28,13 @@ class MenuRestaurantType extends AbstractType
             /** @var MenuRestaurant $menuRestaurant */
             $menuRestaurant = $options["data"];
             $this->currentDishes = $menuRestaurant->getRestaurant()->getDishes();
+            $this->currentBeverages = $menuRestaurant->getRestaurant()->getBeverages();
+            $this->currentDesserts = $menuRestaurant->getRestaurant()->getDesserts();
         }
       //  dd( $menuRestaurant );
         $builder
             ->add('name')
-             ->add('dishes', EntityType::class, [
+            ->add('dishes', EntityType::class, [
                 'label' => "Dishes choice",
                 'multiple'=>"true",
                  'expanded'=>"true",
@@ -44,6 +50,20 @@ class MenuRestaurantType extends AbstractType
                         ;
                 }*/
 
+            ])
+            ->add('beverages', EntityType::class, [
+                'label' => "Beverages choice",
+                'multiple'=>"true",
+                'expanded'=>"true",
+                'class' => Beverage::class,
+                'choices' => $this->currentBeverages,
+            ])
+            ->add('desserts', EntityType::class, [
+                'label' => "Desserts choice",
+                'multiple'=>"true",
+                'expanded'=>"true",
+                'class' => Dessert::class,
+                'choices' => $this->currentDesserts,
             ])
         ;
     }
