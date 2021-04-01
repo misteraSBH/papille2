@@ -50,6 +50,8 @@ class MenuRestaurant
     public function __construct()
     {
         $this->dishes = new ArrayCollection();
+        $this->beverages = new ArrayCollection();
+        $this->desserts = new ArrayCollection();
     }
 
     public function getId(): ?int

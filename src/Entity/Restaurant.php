@@ -56,7 +56,7 @@ class Restaurant
     private $desserts;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="restaurant", cascade="persist")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="restaurants", cascade="persist")
      */
     private $user;
 
@@ -65,12 +65,23 @@ class Restaurant
      */
     private $menusrestaurant;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $opening;
+
+    /**
+     * @ORM\OneToMany(targetEntity=SideDish::class, mappedBy="restaurant")
+     */
+    private $sideDishes;
+
     public function __construct()
     {
         $this->dishes = new ArrayCollection();
         $this->beverages = new ArrayCollection();
         $this->desserts = new ArrayCollection();
         $this->menusrestaurant = new ArrayCollection();
+        $this->sideDishes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -257,6 +268,48 @@ class Restaurant
             // set the owning side to null (unless already changed)
             if ($menusrestaurant->getRestaurant() === $this) {
                 $menusrestaurant->setRestaurant(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getOpening(): ?int
+    {
+        return $this->opening;
+    }
+
+    public function setOpening(?int $opening): self
+    {
+        $this->opening = $opening;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SideDish[]
+     */
+    public function getSideDishes(): Collection
+    {
+        return $this->sideDishes;
+    }
+
+    public function addSideDish(SideDish $sideDish): self
+    {
+        if (!$this->sideDishes->contains($sideDish)) {
+            $this->sideDishes[] = $sideDish;
+            $sideDish->setRestaurant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSideDish(SideDish $sideDish): self
+    {
+        if ($this->sideDishes->removeElement($sideDish)) {
+            // set the owning side to null (unless already changed)
+            if ($sideDish->getRestaurant() === $this) {
+                $sideDish->setRestaurant(null);
             }
         }
 

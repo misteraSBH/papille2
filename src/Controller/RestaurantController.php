@@ -110,7 +110,9 @@ class RestaurantController extends AbstractController
             $entityManager->persist($restaurant);
             $entityManager->flush();
 
-            return $this->redirectToRoute("app_restaurant_beverages_show",  ["id"=> $id]);
+            $this->addFlash('success', 'Le restaurant a été modifié');
+
+            return $this->redirectToRoute("app_restaurant_edit",  ["id"=> $id]);
         }
 
         return $this->render('restaurant/edit.html.twig', [
@@ -125,7 +127,7 @@ class RestaurantController extends AbstractController
     public function dashboard(): Response
     {
         #$this->getUser()->getRestaurant()->count();
-        $restaurants = $this->getUser()->getRestaurant();
+        $restaurants = $this->getUser()->getRestaurants();
 
         return $this->render('restaurant/dashboard.html.twig', [
             'restaurants'=>$restaurants,
@@ -183,6 +185,9 @@ class RestaurantController extends AbstractController
 
             $entityManager->persist($restaurant);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Le plat a été créé');
+
             return $this->redirectToRoute('app_restaurant_dishes_show',["id"=>$id]);
 
         }

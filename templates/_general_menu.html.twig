@@ -8,6 +8,8 @@
         {% if is_granted("ROLE_RESTAURANT_OWNER") or is_granted("ROLE_SUPER_ADMIN") %}
             <li class="text-center bg-dark py-2">
                 {{ app.user.email }}
+
+                {{ app.user.restaurants[0].id }}
             </li>
         {% endif %}
 

@@ -39,11 +39,11 @@ class User implements UserInterface
     /**
      * @ORM\OneToMany(targetEntity=Restaurant::class, mappedBy="user")
      */
-    private $restaurant;
+    private $restaurants;
 
     public function __construct()
     {
-        $this->restaurant = new ArrayCollection();
+        $this->restaurants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,15 +130,15 @@ class User implements UserInterface
     /**
      * @return Collection|Restaurant[]
      */
-    public function getRestaurant(): Collection
+    public function getRestaurants(): Collection
     {
-        return $this->restaurant;
+        return $this->restaurants;
     }
 
     public function addRestaurant(Restaurant $restaurant): self
     {
-        if (!$this->restaurant->contains($restaurant)) {
-            $this->restaurant[] = $restaurant;
+        if (!$this->restaurants->contains($restaurant)) {
+            $this->restaurants[] = $restaurant;
             $restaurant->setUser($this);
         }
 
@@ -147,7 +147,7 @@ class User implements UserInterface
 
     public function removeRestaurant(Restaurant $restaurant): self
     {
-        if ($this->restaurant->removeElement($restaurant)) {
+        if ($this->restaurants->removeElement($restaurant)) {
             // set the owning side to null (unless already changed)
             if ($restaurant->getUser() === $this) {
                 $restaurant->setUser(null);
