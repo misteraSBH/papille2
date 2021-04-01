@@ -46,9 +46,15 @@ class Dish
      */
     private $menuRestaurants;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=SideDish::class, inversedBy="dishes")
+     */
+    private $sidedishes;
+
     public function __construct()
     {
         $this->menuRestaurants = new ArrayCollection();
+        $this->sidedishes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -120,6 +126,30 @@ class Dish
         if ($this->menuRestaurants->removeElement($menuRestaurant)) {
             $menuRestaurant->removeDish($this);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SideDish[]
+     */
+    public function getSidedishes(): Collection
+    {
+        return $this->sidedishes;
+    }
+
+    public function addSidedish(SideDish $sidedish): self
+    {
+        if (!$this->sidedishes->contains($sidedish)) {
+            $this->sidedishes[] = $sidedish;
+        }
+
+        return $this;
+    }
+
+    public function removeSidedish(SideDish $sidedish): self
+    {
+        $this->sidedishes->removeElement($sidedish);
 
         return $this;
     }

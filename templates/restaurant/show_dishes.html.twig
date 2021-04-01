@@ -9,6 +9,13 @@
         {% for dish in restaurant.dishes %}
             <tr>
                 <td>{{ dish.name }}</td>
+                <td>
+                    <ul>
+                        {% for sidedish in dish.sidedishes %}
+                            <li>{{ sidedish.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
                 <td>{{ dish.price }} €</td>
                 <td>
                     <a href="{{ path("app_restaurant_dish_edit", {"id": restaurant.id, "iddish": dish.id}) }}" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
