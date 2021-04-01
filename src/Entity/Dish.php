@@ -51,6 +51,11 @@ class Dish
      */
     private $sidedishes;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="dishes")
+     */
+    private $category;
+
     public function __construct()
     {
         $this->menuRestaurants = new ArrayCollection();
@@ -150,6 +155,18 @@ class Dish
     public function removeSidedish(SideDish $sidedish): self
     {
         $this->sidedishes->removeElement($sidedish);
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

@@ -40,11 +40,16 @@ class Category
 
     public $children;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Dish::class, mappedBy="category")
+     */
+    private $dishes;
+
 
     public function __construct()
     {
         $this->parent = new ArrayCollection();
-        $this->children = $this->getChildrenCategories($this->getId());
+        #$this->children = $this->getChildrenCategories($this->getId());
     }
 
     public function getId(): ?int
@@ -114,5 +119,35 @@ class Category
 
     public function __toString(){
         return $this->name;
+    }
+
+    /**
+     * @return Collection|Dish[]
+     */
+    public function getDishes(): Collection
+    {
+        return $this->dishes;
+    }
+
+    public function addDish(Dish $dish): self
+    {
+        if (!$this->dishes->contains($dish)) {
+            $this->dishes[] = $dish;
+            $dish->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDish(Dish $dish): self
+    {
+        if ($this->dishes->removeElement($dish)) {
+            // set the owning side to null (unless already changed)
+            if ($dish->getCategory() === $this) {
+                $dish->setCategory(null);
+            }
+        }
+
+        return $this;
     }
 }

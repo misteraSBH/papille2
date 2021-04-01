@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Dish;
 use App\Entity\SideDish;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -25,6 +26,10 @@ class DishType extends AbstractType
         $builder
             ->add('name')
             ->add('price')
+            ->add('category', EntityType::class,[
+                'class' => Category::class,
+                'required' => false,
+            ])
             ->add('sidedishes', EntityType::class, [
                 'label' => "Side Dishes choice",
                 'multiple'=>"true",
