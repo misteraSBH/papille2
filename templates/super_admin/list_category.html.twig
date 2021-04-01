@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories List{% endblock %}
+
+{% block body %}
+    <h1>List Categories</h1>
+
+    <a href="{{ path("app_superadmin_category_add")}}" class="btn btn-primary my-3">Add Category</a>
+
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Parent</th>
+            <th>Order</th>
+            <th></th>
+        </tr>
+    {%  for category in categories %}
+        <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.parent }}</td>
+            <td>{{ category.orderNumber }}</td>
+            <td>
+                <a href="{{ path('app_superadmin_category_edit', {"id": category.id}) }}" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                <a href="{{ path('app_superadmin_category_delete', {"id": category.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Delete ?')"><i class="fa fa-trash-alt"></i></a>
+            </td>
+        </tr>
+
+
+
+    {% endfor %}
+    </table>
+{% endblock %}
