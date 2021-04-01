@@ -4,6 +4,7 @@
     <h1>Restaurant - show dishes</h1>
 
     <a href="{{ path("app_restaurant_dish_add", {"id": restaurant.id}) }}" class="btn btn-primary my-3">Create Dish</a>
+    <a href="{{ path("app_restaurant_sidedishes_show", {"id": restaurant.id}) }}" class="btn btn-primary my-3">Show Side Dish</a>
     <table class="table">
         {% for dish in restaurant.dishes %}
             <tr>

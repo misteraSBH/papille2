@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Restaurant - show sidedishes</h1>
+
+    <a href="{{ path("app_restaurant_sidedish_add", {"id": restaurant.id}) }}" class="btn btn-primary my-3">Create Sidedish</a>
+    <table class="table">
+        {% for sidedish in restaurant.sidedishes %}
+            <tr>
+                <td>{{ sidedish.name }}</td>
+                <td>{{ sidedish.price }} €</td>
+                <td>
+                    <a href="{{ path("app_restaurant_sidedish_edit", {"id": restaurant.id,"idsidedish": sidedish.id }) }}" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="{{ path("app_restaurant_sidedish_delete", {"id": restaurant.id,"idsidedish": sidedish.id }) }}" class="btn btn-danger ml-2" onclick="return confirm('Delete ?')"><i class="fa fa-trash-alt"></i></a>
+                </td>
+
+
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

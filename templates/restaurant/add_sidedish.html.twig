@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Add Side Dish</h1>
+
+    {{ form_start(form,{'attr' : {novalidate: 'novalidate'}}) }}
+         {{ form_widget(form) }}
+    <button type="submit" class="btn btn-primary" >Add</button>
+    {{ form_end(form) }}
+{% endblock %}

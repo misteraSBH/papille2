@@ -7,17 +7,20 @@ use App\Entity\Dessert;
 use App\Entity\Dish;
 use App\Entity\MenuRestaurant;
 use App\Entity\Restaurant;
+use App\Entity\SideDish;
 use App\Entity\User;
 use App\Form\BeverageType;
 use App\Form\DessertType;
 use App\Form\DishType;
 use App\Form\MenuRestaurantType;
 use App\Form\RestaurantType;
+use App\Form\SideDishType;
 use App\Repository\BeverageRepository;
 use App\Repository\DessertRepository;
 use App\Repository\DishRepository;
 use App\Repository\MenuRestaurantRepository;
 use App\Repository\RestaurantRepository;
+use App\Repository\SideDishRepository;
 use App\Service\ImageUploaderHelper;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -444,7 +447,6 @@ class RestaurantController extends AbstractController
         $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
 
         $restaurant->getMenusrestaurant();
-        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
 
         return $this->render("restaurant/show_menus_restaurant.html.twig",[
             'restaurant' => $restaurant,
@@ -527,6 +529,105 @@ class RestaurantController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute("app_restaurant_menurestaurant_show",  ["id"=> $id]);
+    }
+
+
+
+
+    # -----------------
+    # SideDish
+    # -----------------
+
+    /**
+     * @Route("/restaurant/{id}/show_sidedishes", name="app_restaurant_sidedishes_show")
+     */
+    public function showSideDish(int $id, Restaurant $restaurant):Response
+    {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        $restaurant->getSideDishes();
+
+        return $this->render("restaurant/show_sidedishes.html.twig",[
+            'restaurant' => $restaurant,
+        ]);
+
+    }
+
+    /**
+     * @Route("/restaurant/{id}/add_sidedish", name="app_restaurant_sidedish_add")
+     */
+    public function addSideDish(int $id, Restaurant $restaurant, EntityManagerInterface $entityManager, Request $request):Response
+    {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        $sidedish = new SideDish();
+        $sidedish->setRestaurant($restaurant);
+
+        $form = $this->createForm(SideDishType::class, $sidedish);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /**@var $sidedish SideDish */
+            $sidedish = $form->getData();
+            $restaurant->addSideDish($sidedish);
+
+            $entityManager->persist($sidedish);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le SideDish a bien été créé');
+            return $this->redirectToRoute("app_restaurant_sidedishes_show",  ["id"=> $id]);
+        }
+
+        return $this->render('restaurant/add_sidedish.html.twig', [
+            'restaurant' => $restaurant,
+            'form' => $form->createView(),
+        ]);
+
+    }
+
+    /**
+     * @Route("/restaurant/{id}/edit_sidedish/{idsidedish}", name="app_restaurant_sidedish_edit")
+     */
+    public function editSideDish(int $id, int $idsidedish,Restaurant $restaurant, EntityManagerInterface $entityManager, Request $request, SideDishRepository $sideDishRepository): Response
+    {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        $sideDish = $sideDishRepository->find($idsidedish);
+
+        $form = $this->createForm(SideDishType::class, $sideDish);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            /**@var $sideDish SideDish */
+
+            $sideDish = $form->getData();
+
+            $entityManager->persist($sideDish);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Le SideDish a bien été modifié');
+            return $this->redirectToRoute("app_restaurant_sidedishes_show",  ["id"=> $id]);
+        }
+
+        return $this->render('restaurant/edit_sidedish.html.twig', [
+            'form'=>$form->createView(),
+            'sidedish'=>$sideDish,
+        ]);
+    }
+
+    /**
+     * @Route("/restaurant/{id}/delete_sidedish/{idsidedish}", name="app_restaurant_sidedish_delete")
+     */
+    public function deleteSideDish(int $id, int $idsidedish, Restaurant $restaurant, EntityManagerInterface $entityManager, SideDishRepository $sideDishRepository): Response
+    {
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        $sideDish = $sideDishRepository->find($idsidedish);
+
+        $entityManager->remove($sideDish);
+        $entityManager->flush();
+
+        return $this->redirectToRoute("app_restaurant_sidedishes_show",  ["id"=> $id]);
     }
 }
 
