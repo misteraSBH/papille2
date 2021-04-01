@@ -144,7 +144,7 @@ class RestaurantController extends AbstractController
     public function delete(int $id, Restaurant $restaurant): Response
     {
         $this->denyAccessUnlessGranted("DELETE_RESTAURANT", $restaurant);
-
+        $this->addFlash('success', 'Le Restaurant a été supprimé');
         return new Response("Coucou super admin");
     }
 
@@ -220,6 +220,7 @@ class RestaurantController extends AbstractController
             $entityManager->persist($dish);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le Dish a bien été modifié');
             return $this->redirectToRoute("app_restaurant_dishes_show",  ["id"=> $id]);
         }
 
@@ -240,7 +241,7 @@ class RestaurantController extends AbstractController
 
         $entityManager->remove($dish);
         $entityManager->flush();
-
+        $this->addFlash('success', 'Le Dish a bien été supprimé');
         return $this->redirectToRoute("app_restaurant_dishes_show",  ["id"=> $id]);
     }
 
@@ -290,6 +291,8 @@ class RestaurantController extends AbstractController
 
             $entityManager->persist($restaurant);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Le Beverage a bien été ajouté');
             return $this->redirectToRoute('app_restaurant_beverages_show',["id"=>$id]);
 
         }
@@ -318,7 +321,7 @@ class RestaurantController extends AbstractController
 
             $entityManager->persist($beverage);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Le Beverage a bien été édité');
             return $this->redirectToRoute("app_restaurant_beverages_show",  ["id"=> $id]);
         }
 
@@ -340,7 +343,7 @@ class RestaurantController extends AbstractController
 
         $entityManager->remove($beverage);
         $entityManager->flush();
-
+        $this->addFlash('success', 'Le Beverage a bien été supprimé');
         return $this->redirectToRoute("app_restaurant_beverages_show",  ["id"=> $id]);
     }
 
@@ -383,6 +386,7 @@ class RestaurantController extends AbstractController
             $entityManager->persist($dessert);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le Dessert a bien été ajouté');
             return $this->redirectToRoute("app_restaurant_dessert_show",  ["id"=> $id]);
         }
 
@@ -410,7 +414,7 @@ class RestaurantController extends AbstractController
 
             $entityManager->persist($dessert);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Le Dessert a bien été modifié');
             return $this->redirectToRoute("app_restaurant_dessert_show",  ["id"=> $id]);
         }
 
@@ -429,7 +433,7 @@ class RestaurantController extends AbstractController
 
         $entityManager->remove($dessert);
         $entityManager->flush();
-
+        $this->addFlash('success', 'Le Dessert a bien été supprimé');
         return $this->redirectToRoute("app_restaurant_dessert_show",  ["id"=> $id]);
     }
 
@@ -476,6 +480,7 @@ class RestaurantController extends AbstractController
             $entityManager->persist($menurestaurant);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le Menu a bien été ajouté');
             return $this->redirectToRoute("app_restaurant_menurestaurant_show",  ["id"=> $id]);
         }
 
@@ -506,7 +511,7 @@ class RestaurantController extends AbstractController
 
             $entityManager->persist($menuRestaurant);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Le Menu a bien été modifié');
             return $this->redirectToRoute("app_restaurant_menurestaurant_show",  ["id"=> $id]);
         }
 
@@ -527,7 +532,7 @@ class RestaurantController extends AbstractController
 
         $entityManager->remove($menuRestaurant);
         $entityManager->flush();
-
+        $this->addFlash('success', 'Le Menu a bien été supprimé');
         return $this->redirectToRoute("app_restaurant_menurestaurant_show",  ["id"=> $id]);
     }
 
@@ -626,7 +631,7 @@ class RestaurantController extends AbstractController
 
         $entityManager->remove($sideDish);
         $entityManager->flush();
-
+        $this->addFlash('success', 'Le SideDish a bien été supprimé');
         return $this->redirectToRoute("app_restaurant_sidedishes_show",  ["id"=> $id]);
     }
 }
