@@ -27,7 +27,7 @@ class Category
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="parent")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="children")
      */
     private $parent;
 
@@ -38,18 +38,23 @@ class Category
      */
     private $orderNumber;
 
-    public $children;
+
 
     /**
      * @ORM\OneToMany(targetEntity=Dish::class, mappedBy="category")
      */
     private $dishes;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="parent")
+     */
+    private $children;
+
 
     public function __construct()
     {
-        $this->parent = new ArrayCollection();
-        #$this->children = $this->getChildrenCategories($this->getId());
+        $this->parent   = new ArrayCollection();
+        #$this->children = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -145,6 +150,40 @@ class Category
             // set the owning side to null (unless already changed)
             if ($dish->getCategory() === $this) {
                 $dish->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getChildren(): ?self
+    {
+        return $this->children;
+    }
+
+    public function setChildren(?self $children): self
+    {
+        $this->children = $children;
+
+        return $this;
+    }
+
+    public function addChild(self $child): self
+    {
+        if (!$this->children->contains($child)) {
+            $this->children[] = $child;
+            $child->setChildren($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChild(self $child): self
+    {
+        if ($this->children->removeElement($child)) {
+            // set the owning side to null (unless already changed)
+            if ($child->getChildren() === $this) {
+                $child->setChildren(null);
             }
         }
 

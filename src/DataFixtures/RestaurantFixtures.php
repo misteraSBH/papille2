@@ -42,7 +42,7 @@ class RestaurantFixtures extends Fixture
 
             $owner->setRoles(["ROLE_RESTAURANT_OWNER"]);
             if($i==3){
-                $owner->setRoles(["ROLE_SUPER_ADMIN"]);
+                $owner->setRoles(["ROLE_SUPER_ADMIN", "ROLE_RESTAURANT_OWNER"]);
             }
             $fakeRestaurant->setUser($owner);
 
@@ -121,6 +121,8 @@ class RestaurantFixtures extends Fixture
         $faker->meatName();  // A random Meat Name
         $faker->sauceName();  // A random Sauce Name
         */
+
+
 
         $manager->flush();
     }

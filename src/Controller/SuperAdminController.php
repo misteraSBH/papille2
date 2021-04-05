@@ -37,8 +37,8 @@ class SuperAdminController extends AbstractController
      */
     public function listCategories(CategoryRepository $categoryRepository): Response
     {
-        $categories = $categoryRepository->findBy([],["orderNumber"=>"ASC"]);
-        #$categories = $categoryRepository->findByParentNull();
+        #$categories = $categoryRepository->findBy([],["orderNumber"=>"ASC"]);
+        $categories = $categoryRepository->findByParentNull();
 
         return $this->render('super_admin/list_category.html.twig', [
             'categories' => $categories,
@@ -48,7 +48,7 @@ class SuperAdminController extends AbstractController
     /**
      * @Route("/superadmin/category/add", name="app_superadmin_category_add")
      */
-    public function addCategory(Request $request, EntityManagerInterface $entityManager):Response
+    public function addCategory(Request $request, EntityManagerInterface $entityManager, CategoryRepository $categoryRepository):Response
     {
         $category = new Category();
         $category->setParent(null);
@@ -91,6 +91,15 @@ class SuperAdminController extends AbstractController
              * @var Category $category
              */
             $category = $form->getData();
+            dump($category);
+
+            $categoryChildren = $categoryRepository->findByParent($category->getId());
+            foreach($categoryChildren as $value){
+                dump($value);
+                $category->addChild($value);
+            }
+
+            dd($category);
 
             $entityManager->persist($category);
             $entityManager->flush();
@@ -119,15 +128,4 @@ class SuperAdminController extends AbstractController
         return $this->redirectToRoute("app_superadmin_category_list");
     }
 
-
-
-    /**
-     * @Route("/test/{id}")
-     */
-    public function getChildrenCategories(int $id, Category $category,CategoryRepository $categoryRepository):Response
-    {
-        $category->children = $categoryRepository->findByParent($id);
-
-        return new Response("Ok");
-    }
 }
