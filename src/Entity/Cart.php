@@ -6,6 +6,7 @@ use App\Repository\CartRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Config\Definition\FloatNode;
 
 /**
  * @ORM\Entity(repositoryClass=CartRepository::class)
@@ -42,25 +43,58 @@ class Cart
         return $this->cartitems;
     }
 
-    public function addCartitem(CartItem $cartitem): self
+    public function addCartitem(CartItem $cartitem): CartItem
     {
-        if (!$this->cartitems->contains($cartitem)) {
-            $this->cartitems[] = $cartitem;
-            $cartitem->setCart($this);
+        foreach ($this->cartitems as $item){
+            /**
+             * @var CartItem $item
+             */
+            if($item->getProduct()->getId() == $cartitem->getProduct()->getId()){
+                $item->setQuantity($item->getQuantity() + $cartitem->getQuantity());
+                return $item;
+            }
         }
 
-        return $this;
+        $this->cartitems[] = $cartitem;
+
+        return $cartitem;
     }
 
-    public function removeCartitem(CartItem $cartitem): self
+    public function removeCartitem(Product $product)
     {
-        if ($this->cartitems->removeElement($cartitem)) {
+        /*if ($this->cartitems->removeElement($cartitem)) {
             // set the owning side to null (unless already changed)
             if ($cartitem->getCart() === $this) {
                 $cartitem->setCart(null);
             }
+        }*/
+
+        foreach ($this->cartitems as $item){
+            /**
+             * @var CartItem $item
+             */
+            if($item->getProduct()->getId() == $product->getId()){
+
+                $this->cartitems->removeElement($item);
+                return $this;
+            }
         }
 
+
         return $this;
+    }
+
+    public function getTotalAmount()
+    {
+        $totalAmount = 0;
+        foreach($this->cartitems as $cartitem){
+            /**
+             * @var $cartitem CartItem
+             */
+            $totalAmount += $cartitem->getQuantity() * $cartitem->getProduct()->getPrice();
+        }
+
+        return $totalAmount;
+
     }
 }

@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"product" = "Product", "dish" = "Dish"})
+ * @ORM\DiscriminatorMap({"product" = "Product", "dish" = "Dish", "beverage" = "Beverage", "dessert" = "Dessert"})
  */
 class Product
 {
