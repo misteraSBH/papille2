@@ -46,7 +46,7 @@ class Category
     private $dishes;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="parent")
+     * @ORM\OneToMany(targetEntity=Category::class, mappedBy="parent")
      */
     private $children;
 

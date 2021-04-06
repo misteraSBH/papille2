@@ -37,8 +37,8 @@ class SuperAdminController extends AbstractController
      */
     public function listCategories(CategoryRepository $categoryRepository): Response
     {
-        #$categories = $categoryRepository->findBy([],["orderNumber"=>"ASC"]);
-        $categories = $categoryRepository->findByParentNull();
+        $categories = $categoryRepository->findBy([],["orderNumber"=>"ASC"]);
+        #$categories = $categoryRepository->findByParentNull();
 
         return $this->render('super_admin/list_category.html.twig', [
             'categories' => $categories,

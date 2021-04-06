@@ -11,30 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass=DishRepository::class)
  */
-class Dish
+class Dish extends Product
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
-     * @Assert\Type("string")
-     */
-    private $name;
-
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     * @Assert\NotBlank()
-     * @Assert\Type("numeric")
-     * @Assert\Positive()
-     */
-    private $price = 0;
-
     /**
      * @ORM\ManyToOne(targetEntity=Restaurant::class, inversedBy="dishes")
      * @Assert\Valid();
@@ -62,34 +40,7 @@ class Dish
         $this->sidedishes = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPrice(): ?string
-    {
-        return $this->price;
-    }
-
-    public function setPrice(string $price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
 
     public function getRestaurant(): ?Restaurant
     {

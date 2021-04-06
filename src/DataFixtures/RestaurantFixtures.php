@@ -27,7 +27,7 @@ class RestaurantFixtures extends Fixture
         $faker->addProvider(new \FakerRestaurant\Provider\en_US\Restaurant($faker));
         $faker->addProvider(new \Faker\Provider\Lorem($faker));
 
-        for($i=1;$i<=500;$i++){
+        for($i=1;$i<=50;$i++){
             $fakeRestaurant = new Restaurant();
 
             $fakeRestaurant->setName($faker->company);
