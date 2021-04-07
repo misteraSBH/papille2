@@ -49,6 +49,9 @@
             <div class="col-3">
                 {{ opening_label[ restaurant.opening ] }}
             </div>
+            <div class="col-3">
+                <a href="{{ path("app_front_menu_show", {"id": restaurant.id}) }}" class="btn btn-primary">Show menu</a>
+            </div>
         </div>
     {% endfor %}
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\MenuRestaurant;
 use App\Entity\Restaurant;
 use App\Repository\RestaurantRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class FrontController extends AbstractController
 {
     /**
-     * @Route("/front", name="front")
+     * @Route("/front", name="app_front")
      */
     public function index(EntityManagerInterface $entityManager, RestaurantRepository $restaurantRepository, Request $request): Response
     {
@@ -30,6 +31,21 @@ class FrontController extends AbstractController
         return $this->render('front/index.html.twig', [
             'restaurants' => $restaurants,
             'opening_label' => $opening_label,
+        ]);
+    }
+
+    /**
+     * @Route("/front/menu/{id}", name="app_front_menu_show")
+     */
+
+    public function showMenuRestaurant(int $id, Restaurant $restaurant)
+    {
+        $menus = $restaurant->getMenusrestaurant();
+        $menus->count();
+        #dd($menus);
+
+        return $this->render('front/show_menus_restaurant.html.twig', [
+            'menus' => $menus,
         ]);
     }
 }

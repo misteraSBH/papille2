@@ -1,0 +1,45 @@
+{% extends 'base_front.html.twig' %}
+
+{% block title %}Hello FrontController!{% endblock %}
+
+{% block body %}
+    <h1>Menu restaurant</h1>
+
+
+    {%  for menu in menus %}
+        <div class="row border-bottom ">
+            <div class="col-12 font-weight-bold bg-dark text-white py-3 ">
+                {{ menu.name }}
+            </div>
+
+            <div class="row col-12 p-0">
+                <div class="col">
+                    <p class="font-weight-bold m-0">DISHES</p>
+                    <ul>
+                        {% for dish in menu.dishes %}
+                            <li>{{ dish.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col">
+                    <p class="font-weight-bold m-0">BEVERAGES</p>
+                    <ul>
+                        {% for beverage in menu.beverages %}
+                            <li>{{ beverage.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col">
+                    <p class="font-weight-bold m-0">DESSERTS</p>
+                    <ul>
+                        {% for dessert in menu.desserts %}
+                            <li>{{ dessert.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+            </div>
+
+        </div>
+    {% endfor %}
+{% endblock %}

@@ -56,7 +56,7 @@ class Dish extends Product
 
     public function __toString()
     {
-        return $this->name;
+        return $this->getName();
     }
 
     /**
