@@ -18,11 +18,18 @@ class FrontController extends AbstractController
     public function index(EntityManagerInterface $entityManager, RestaurantRepository $restaurantRepository, Request $request): Response
     {
         $qsearch = $request->query->get('search');
-        $restaurants = $restaurantRepository->findAllRestaurantsByNameorType($qsearch);
+        $qopening = $request->query->get('opening');
+        if($qopening == 3){$qopening = "%";}
 
+        $restaurants = $restaurantRepository->findAllRestaurantsByNameorType($qsearch, $qopening);
+
+        $opening_label[1] = "Lunch";
+        $opening_label[2] = "Dinner";
+        $opening_label[3] = "Lunch & Dinner";
 
         return $this->render('front/index.html.twig', [
             'restaurants' => $restaurants,
+            'opening_label' => $opening_label,
         ]);
     }
 }

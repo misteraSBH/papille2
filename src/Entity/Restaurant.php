@@ -276,7 +276,14 @@ class Restaurant
 
     public function getOpening(): ?int
     {
+
+        if($this->opening == null) {
+            $this->opening = 1;
+            return $this->opening;
+        }
+
         return $this->opening;
+
     }
 
     public function setOpening(?int $opening): self

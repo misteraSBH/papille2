@@ -12,6 +12,13 @@
                 <input type="text" name="search" class="form-control" placeholder="Restaurant Name or Category" value="{{ app.request.query.get('search') }}">
             </div>
             <div class="col">
+                <select name="opening" class="form-control">
+                    <option value="3">All meals</option>
+                    <option value="1" {% if(app.request.query.get('opening') == 1) %} selected {% endif %}>Lunch</option>
+                    <option value="2" {% if(app.request.query.get('opening') == 2) %} selected {% endif %}>Dinner</option>
+                </select>
+            </div>
+            <div class="col">
                 <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i></button>
             </div>
         </div>
@@ -40,7 +47,7 @@
                 {{ restaurant.type }}
             </div>
             <div class="col-3">
-                {{ restaurant.opening }}
+                {{ opening_label[ restaurant.opening ] }}
             </div>
         </div>
     {% endfor %}

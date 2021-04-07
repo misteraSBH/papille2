@@ -33,8 +33,7 @@ class RestaurantFixtures extends Fixture
             $fakeRestaurant->setName($faker->company);
             $fakeRestaurant->setAddress($faker->address);
             $fakeRestaurant->setType($faker->sauceName());
-
-
+            $fakeRestaurant->setOpening(rand(1,3));
 
             $owner = new User();
             $owner->setEmail("resto".$i."@test.com");
