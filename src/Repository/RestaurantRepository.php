@@ -52,5 +52,19 @@ class RestaurantRepository extends ServiceEntityRepository
             ;
     }
 
+    public function findAllRestaurantsByNameorType($search)
+    {
+        if(!empty($search)){
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.name LIKE :search OR r.type LIKE :search')
+            ->setParameter('search', '%'.$search.'%')
+            ->orderBy('r.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+        } else {
+            return $this->findAll();
+        }
+    }
 
 }
