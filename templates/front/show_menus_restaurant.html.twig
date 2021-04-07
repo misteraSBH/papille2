@@ -5,41 +5,75 @@
 {% block body %}
     <h1>Menu restaurant</h1>
 
+    <div class="row">
 
-    {%  for menu in menus %}
-        <div class="row border-bottom ">
-            <div class="col-12 font-weight-bold bg-dark text-white py-3 ">
-                {{ menu.name }}
-            </div>
+        <div class="col-9">
+        {%  for menu in menus %}
+            {%  if menu.visible == 1 %}
+                <div class="row border-bottom ">
+                    <div class="col-12 font-weight-bold bg-dark text-white py-3 ">
+                        {{ menu.name }}
+                    </div>
 
-            <div class="row col-12 p-0">
-                <div class="col">
-                    <p class="font-weight-bold m-0">DISHES</p>
-                    <ul>
-                        {% for dish in menu.dishes %}
-                            <li>{{ dish.name }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="col">
-                    <p class="font-weight-bold m-0">BEVERAGES</p>
-                    <ul>
-                        {% for beverage in menu.beverages %}
-                            <li>{{ beverage.name }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <div class="col">
-                    <p class="font-weight-bold m-0">DESSERTS</p>
-                    <ul>
-                        {% for dessert in menu.desserts %}
-                            <li>{{ dessert.name }}</li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                    <div class="row col-12 p-0">
+                        <div class="col">
+                            <p class="font-weight-bold m-0">DISHES</p>
+                            <ul>
+                                {% for dish in menu.dishes %}
+                                    <li class="mb-1">
+                                        {{ dish.name }}
+                                        <a href="{{ path("app_cart_cartitem_product_add", {"id": app.session.get("app_current_cart").id, "idproduct": dish.id })}}" class="btn btn-primary btn-sm"><i class="fa fa-cart-plus"></i></a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <p class="font-weight-bold m-0">BEVERAGES</p>
+                            <ul>
+                                {% for beverage in menu.beverages %}
+                                    <li>{{ beverage.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col">
+                            <p class="font-weight-bold m-0">DESSERTS</p>
+                            <ul>
+                                {% for dessert in menu.desserts %}
+                                    <li>{{ dessert.name }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
 
+                </div>
+            {%  endif %}
+        {% endfor %}
+        </div>
+
+        <div class="col-3 border ">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Cart</h2>
+                </div>
+                <div class="card-body">
+                    {% for cartItem in cart.cartitems %}
+                        <div class="row border-bottom py-2">
+                            <div class="col-3">{{ cartItem.quantity }}</div>
+                            <div class="col-9">{{ cartItem.product.name }}</div>
+                            <div class="col-8">{{ cartItem.product.price }} €</div>
+                            <div class="col-4">
+                                <a href="{{ path("app_cart_cartitem_product_delete", {"id": app.session.get("app_current_cart").id, "idCartItem": cartItem.id})}}" class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Delete ?');"><i class="fa fa-trash-alt"></i></a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="card-footer">
+
+                </div>
             </div>
 
         </div>
-    {% endfor %}
+
+    </div>
 {% endblock %}

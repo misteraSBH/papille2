@@ -34,6 +34,7 @@ class MenuRestaurantType extends AbstractType
       //  dd( $menuRestaurant );
         $builder
             ->add('name')
+            ->add('visible')
             ->add('dishes', EntityType::class, [
                 'label' => "Dishes choice",
                 'multiple'=>"true",

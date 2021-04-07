@@ -2,11 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Beverage;
 use App\Entity\Cart;
 use App\Entity\CartItem;
-use App\Entity\Dish;
-use App\Entity\Product;
 use App\Repository\CartItemRepository;
 use App\Repository\CartRepository;
 use App\Repository\ProductRepository;
@@ -24,19 +21,13 @@ class CartController extends AbstractController
     public function index(SessionInterface $masession, EntityManagerInterface $entityManager, CartRepository $cartRepository): Response
     {
 
+        #dd($masession);
+        if(!$masession->get("app_current_cart")){
 
-
-        if(!$masession) {
-            $masession->start();
-            if(!$masession->get("app_current_cart")){
-                $masession->set("app_current_cart", $cart);
-                $cart = new Cart();
-                $entityManager->persist($cart);
-                $entityManager->flush();
-            } else {
-                $cart = $cartRepository->find($masession->get("app_current_cart"));
-            }
-
+            $cart = new Cart();
+            $entityManager->persist($cart);
+            $entityManager->flush();
+            $masession->set("app_current_cart", $cart);
         } else {
             $cart = $cartRepository->find($masession->get("app_current_cart"));
         }
@@ -48,8 +39,9 @@ class CartController extends AbstractController
 
     /**
      * @Route(path="/cart/{id}/addProduct/{idproduct}", name="app_cart_cartitem_product_add")
+     * @Route(path="/front/cart/{id}/addProduct/{idproduct}", name="app_front_cart_cartitem_product_add")
      */
-    public function addProduct(int $id, int $idproduct, Cart $cart, SessionInterface $session, ProductRepository $productRepository, EntityManagerInterface $entityManager)
+    public function addProduct(int $id, int $idproduct, Cart $cart, SessionInterface $session, ProductRepository $productRepository, EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request)
     {
         #$cart = $session->get("app_current_cart");
         #dd($cart);
@@ -67,21 +59,30 @@ class CartController extends AbstractController
         $entityManager->persist($cart);
         $entityManager->flush();
 
+        $session->set("app_current_cart", $cart);
 
-        return $this->redirectToRoute("app_cart");
+        $origine = $request->headers->get('referer');
+
+        return $this->redirect($origine);
     }
 
 
     /**
      * @Route(path="/cart/{id}/removeCartItem/{idCartItem}", name="app_cart_cartitem_product_delete")
      */
-    public function deleteCartItem(int $id, int $idCartItem, Cart $cart, SessionInterface $session, CartItemRepository $cartItemRepository, EntityManagerInterface $entityManager)
+    public function deleteCartItem(int $id, int $idCartItem, Cart $cart, SessionInterface $session, CartItemRepository $cartItemRepository, EntityManagerInterface $entityManager, \Symfony\Component\HttpFoundation\Request $request, CartRepository $cartRepository)
     {
-        #$cart = $session->get("app_current_cart");
+
         $cartItem = $cartItemRepository->find($idCartItem);
         $entityManager->remove($cartItem);
         $entityManager->flush();
-        return $this->redirectToRoute("app_cart");
+
+        $cart = $cartRepository->find($id);
+
+        $session->set("app_current_cart", $cart );
+        $origine = $request->headers->get('referer');
+
+        return $this->redirect($origine);
 
     }
 

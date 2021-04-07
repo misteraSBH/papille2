@@ -45,6 +45,11 @@ class MenuRestaurant
      */
     private $desserts;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $visible;
+
 
 
     public function __construct()
@@ -155,6 +160,18 @@ class MenuRestaurant
     public function setRestaurant(?Restaurant $restaurant): self
     {
         $this->restaurant = $restaurant;
+
+        return $this;
+    }
+
+    public function getVisible(): ?bool
+    {
+        return $this->visible;
+    }
+
+    public function setVisible(bool $visible): self
+    {
+        $this->visible = $visible;
 
         return $this;
     }
