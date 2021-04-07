@@ -11,6 +11,10 @@
             <td>{{ cartItem.quantity }}</td>
             <td>{{ cartItem.product.name }}</td>
             <td>{{ cartItem.product.price }} €</td>
+            <td>
+                <a href="{{ path("app_cart_cartitem_product_delete", {"id": cart.id, "idCartItem": cartItem.id})}}" class="btn btn-danger"
+                   onclick="return confirm('Delete ?');"><i class="fa fa-trash-alt"></i></a>
+            </td>
         </tr>
     {% endfor %}
 

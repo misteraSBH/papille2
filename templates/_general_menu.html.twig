@@ -27,7 +27,11 @@
             <li>
                 <a href="{{ path('app_superadmin_category_list') }}">Categories</a>
             </li>
+
         {% endif %}
+        <li>
+            <a href="{{ path('app_cart') }}">Cart</a>
+        </li>
 
         {% if is_granted("ROLE_RESTAURANT_OWNER") or is_granted("ROLE_SUPER_ADMIN") %}
             <li>

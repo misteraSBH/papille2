@@ -21,7 +21,7 @@ class Cart
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=CartItem::class, mappedBy="cart", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=CartItem::class, mappedBy="cart", orphanRemoval=true, cascade={"persist"})
      */
     private $cartitems;
 
