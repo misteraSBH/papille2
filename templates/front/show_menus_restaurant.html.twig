@@ -31,7 +31,10 @@
                             <p class="font-weight-bold m-0">BEVERAGES</p>
                             <ul>
                                 {% for beverage in menu.beverages %}
-                                    <li>{{ beverage.name }}</li>
+                                    <li class="mb-1">
+                                        {{ beverage.name }}
+                                        <a href="{{ path("app_cart_cartitem_product_add", {"id": app.session.get("app_current_cart").id, "idproduct": beverage.id })}}" class="btn btn-primary btn-sm"><i class="fa fa-cart-plus"></i></a>
+                                    </li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -39,7 +42,10 @@
                             <p class="font-weight-bold m-0">DESSERTS</p>
                             <ul>
                                 {% for dessert in menu.desserts %}
-                                    <li>{{ dessert.name }}</li>
+                                    <li class="mb-1">
+                                        {{ dessert.name }}
+                                        <a href="{{ path("app_cart_cartitem_product_add", {"id": app.session.get("app_current_cart").id, "idproduct": dessert.id })}}" class="btn btn-primary btn-sm"><i class="fa fa-cart-plus"></i></a>
+                                    </li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -50,29 +56,8 @@
         {% endfor %}
         </div>
 
-        <div class="col-3 border ">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Cart</h2>
-                </div>
-                <div class="card-body">
-                    {% for cartItem in cart.cartitems %}
-                        <div class="row border-bottom py-2">
-                            <div class="col-3">{{ cartItem.quantity }}</div>
-                            <div class="col-9">{{ cartItem.product.name }}</div>
-                            <div class="col-8">{{ cartItem.product.price }} €</div>
-                            <div class="col-4">
-                                <a href="{{ path("app_cart_cartitem_product_delete", {"id": app.session.get("app_current_cart").id, "idCartItem": cartItem.id})}}" class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Delete ?');"><i class="fa fa-trash-alt"></i></a>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-                <div class="card-footer">
-
-                </div>
-            </div>
-
+        <div class="col-3">
+            {{ include('_cart.html.twig') }}
         </div>
 
     </div>

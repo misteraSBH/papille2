@@ -31,12 +31,16 @@ class FrontController extends AbstractController
         $opening_label[2] = "Dinner";
         $opening_label[3] = "Lunch & Dinner";
 
-        if(!$session->get("app_current_cart")){
+
+        if( $session->get("app_current_cart") == null){
             $cart = new Cart();
-            $session->set("app_current_cart", $cart);
+            $entityManager->persist($cart);
+            $entityManager->flush();
         } else {
-            $cart = $cartRepository->find($session->get("app_current_cart"));
+            $cart = $cartRepository->find($session->get("app_current_cart")->getId());
         }
+        $session->set("app_current_cart", $cart);
+
 
 
         return $this->render('front/index.html.twig', [
@@ -50,14 +54,16 @@ class FrontController extends AbstractController
      * @Route("/front/menu/{id}", name="app_front_menu_show")
      */
 
-    public function showMenuRestaurant(int $id, Restaurant $restaurant, SessionInterface $session, CartRepository $cartRepository)
+    public function showMenuRestaurant(int $id, Restaurant $restaurant, SessionInterface $session, CartRepository $cartRepository, EntityManagerInterface $entityManager)
     {
-        if(!$session->get("app_current_cart")){
+        if( $session->get("app_current_cart") == null){
             $cart = new Cart();
-            $session->set("app_current_cart", $cart);
+            $entityManager->persist($cart);
+            $entityManager->flush();
         } else {
-            $cart = $cartRepository->find($session->get("app_current_cart"));
+            $cart = $cartRepository->find($session->get("app_current_cart")->getId());
         }
+        $session->set("app_current_cart", $cart);
 
         $menus = $restaurant->getMenusrestaurant();
 

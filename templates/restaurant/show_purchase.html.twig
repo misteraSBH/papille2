@@ -1,0 +1,27 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Restaurant - show Purchases</h1>
+
+    <table class="table">
+        {% for purchase in restaurant.purchases %}
+            <tr>
+                <td>{{ dish.name }}</td>
+                <td>
+                    <ul>
+                        {% for sidedish in dish.sidedishes %}
+                            <li>{{ sidedish.name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ dish.price }} €</td>
+                <td>
+                    <a href="{{ path("app_restaurant_dish_edit", {"id": restaurant.id, "iddish": dish.id}) }}" class="btn btn-primary"><i class="fa fa-pencil-alt"></i></a>
+                    <a href="{{ path("app_restaurant_dish_delete", {"id": restaurant.id, "iddish": dish.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Delete ?')"><i class="fa fa-trash-alt"></i></a>
+                </td>
+
+
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

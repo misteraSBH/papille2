@@ -9,6 +9,7 @@ use App\Repository\CartRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -86,4 +87,30 @@ class CartController extends AbstractController
 
     }
 
+    /**
+     * @Route(path="/cart/{id}/modifyCartItem/{idCartItem}/{action}", name="app_cart_cartitem_product_modify")
+     */
+     public function modifyCartItem(int $id, int $idCartItem, string $action, Cart $cart, SessionInterface $session, CartItemRepository $cartItemRepository, EntityManagerInterface $entityManager,CartRepository $cartRepository, Request $request)
+     {
+         $cartItem = $cartItemRepository->find($idCartItem);
+         $newqty = 0;
+         if($action == "add"){
+             $newqty = $cartItem->getQuantity() + 1;
+         } else {
+             if($cartItem->getQuantity() >= 1) {
+                 $newqty = $cartItem->getQuantity() - 1;
+             }
+         }
+         $cartItem->setQuantity($newqty);
+         $entityManager->persist($cartItem);
+         $entityManager->flush();
+
+         $cart = $cartRepository->find($id);
+
+         $session->set("app_current_cart", $cart );
+         $origine = $request->headers->get('referer');
+
+         return $this->redirect($origine);
+
+     }
 }

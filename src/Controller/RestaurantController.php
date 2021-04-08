@@ -634,5 +634,23 @@ class RestaurantController extends AbstractController
         $this->addFlash('success', 'Le SideDish a bien été supprimé');
         return $this->redirectToRoute("app_restaurant_sidedishes_show",  ["id"=> $id]);
     }
+
+
+    #--------------------------------------
+    # Purchase
+    #--------------------------------------
+    /**
+     * @Route("/restaurant/{id}/show_purchase", name="app_restaurant_purchase_show")
+     */
+    public function showPurchase($id, Restaurant $restaurant):Response
+    {
+
+        $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
+
+        /*return $this->render("restaurant/show_purchase.html.twig",[
+            'restaurant' => $restaurant,
+        ]);*/
+        return new Response();
+    }
 }
 

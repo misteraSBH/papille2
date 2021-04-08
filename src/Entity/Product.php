@@ -42,9 +42,15 @@ class Product
      */
     private $cartItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PurchaseItem::class, mappedBy="refProduct", orphanRemoval=true)
+     */
+    private $purchaseItems;
+
     public function __construct()
     {
         $this->cartItems = new ArrayCollection();
+        $this->purchaseItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +118,36 @@ class Product
             // set the owning side to null (unless already changed)
             if ($cartItem->getProduct() === $this) {
                 $cartItem->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PurchaseItem[]
+     */
+    public function getPurchaseItems(): Collection
+    {
+        return $this->purchaseItems;
+    }
+
+    public function addPurchaseItem(PurchaseItem $purchaseItem): self
+    {
+        if (!$this->purchaseItems->contains($purchaseItem)) {
+            $this->purchaseItems[] = $purchaseItem;
+            $purchaseItem->setRefProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removePurchaseItem(PurchaseItem $purchaseItem): self
+    {
+        if ($this->purchaseItems->removeElement($purchaseItem)) {
+            // set the owning side to null (unless already changed)
+            if ($purchaseItem->getRefProduct() === $this) {
+                $purchaseItem->setRefProduct(null);
             }
         }
 
