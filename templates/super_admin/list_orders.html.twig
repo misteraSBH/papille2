@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories List{% endblock %}
+
+{% block body %}
+    <h1>List Orders</h1>
+
+
+    <table class="table">
+        <tr>
+            <th>Order Id</th>
+            <th>Restaurant</th>
+            <th>Order</th>
+            <th></th>
+        </tr>
+        {%  for purchase in purchases %}
+            <tr>
+                <td>{{ purchase.id }}</td>
+
+                <td>
+                    {% for orderSlip in purchase.orderSlips %}
+
+
+                        <p>OrderSlip {{ orderSlip.id }} - {{ orderSlip.restaurant.name }}</p>
+                        <ul>
+                        {%  for purchaseItem in orderSlip.purchaseItems %}
+                            <li>
+                                {{ purchaseItem.quantity }} {{ purchaseItem.name }} {{ purchaseItem.price }}€
+                            </li>
+                        {% endfor %}
+                        </ul>
+
+                    {% endfor %}
+                </td>
+            </tr>
+
+
+        {% endfor %}
+    </table>
+{% endblock %}

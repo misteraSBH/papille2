@@ -9,6 +9,7 @@ use App\Repository\CartRepository;
 use App\Repository\RestaurantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -54,23 +55,45 @@ class FrontController extends AbstractController
      * @Route("/front/menu/{id}", name="app_front_menu_show")
      */
 
-    public function showMenuRestaurant(int $id, Restaurant $restaurant, SessionInterface $session, CartRepository $cartRepository, EntityManagerInterface $entityManager)
+    public function showMenuRestaurant(int $id, Restaurant $restaurant, SessionInterface $session, CartRepository $cartRepository, EntityManagerInterface $entityManager, Request $request)
     {
+
+
+
         if( $session->get("app_current_cart") == null){
-            $cart = new Cart();
-            $entityManager->persist($cart);
-            $entityManager->flush();
+
+            if($request->cookies->get('app_delifood_cart')){
+                $cart = $cartRepository->findOneBy(["uuid"=>$request->cookies->get('app_delifood_cart')]);
+                $session->set("app_current_cart", $cart);
+            } else {
+
+                $cart = new Cart();
+                $entityManager->persist($cart);
+                $entityManager->flush();
+
+                $cookie = Cookie::create("app_delifood_cart")
+                    ->withValue($cart->getUuid())
+                    ->withExpires(strtotime('Fri, 20-May-2022 15:00:00 GMT'))
+                    ->withSecure(true);
+                $session->set("app_current_cart", $cart);
+            }
+
         } else {
             $cart = $cartRepository->find($session->get("app_current_cart")->getId());
+            $session->set("app_current_cart", $cart);
         }
-        $session->set("app_current_cart", $cart);
+
 
         $menus = $restaurant->getMenusrestaurant();
 
-
-        return $this->render('front/show_menus_restaurant.html.twig', [
+        $response = $this->render('front/show_menus_restaurant.html.twig', [
             'menus' => $menus,
             'cart' => $cart,
         ]);
+
+        if(isset($cookie)) {
+            $response->headers->setCookie($cookie);
+        }
+        return $response;
     }
 }

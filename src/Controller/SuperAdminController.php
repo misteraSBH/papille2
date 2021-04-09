@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Category;
 use App\Form\CategoryType;
 use App\Repository\CategoryRepository;
+use App\Repository\PurchaseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -126,6 +127,20 @@ class SuperAdminController extends AbstractController
         $this->addFlash('success', 'The category '.$category->getName().' has been removed');
 
         return $this->redirectToRoute("app_superadmin_category_list");
+    }
+
+    /**
+     * @Route("/superadmin/orderslist", name="app_superadmin_orders_list")
+     */
+    public function listOrders(EntityManagerInterface $entityManager, PurchaseRepository $purchaseRepository){
+
+        $purchases = $purchaseRepository->findAll();
+       // dd($purchases);
+        return $this->render("super_admin/list_orders.html.twig",[
+            'purchases' => $purchases,
+        ]);
+
+
     }
 
 }

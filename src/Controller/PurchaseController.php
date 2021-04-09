@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Cart;
 use App\Entity\CartItem;
+use App\Entity\OrderSlip;
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
 use App\Repository\CartRepository;
@@ -64,8 +65,18 @@ class PurchaseController extends AbstractController
         /**
          * @var CartItem $cartItem
          */
+
+        $arrayListOwnerId = [];
+
+
         foreach($cart->getCartitems() as $cartItem){
-            dd($cartItem->getProduct()->getRestaurant());
+
+            $idRestaurant = $cartItem->getProduct()->getRestaurant()->getId();
+            if(!in_array($idRestaurant, $arrayListOwnerId)){
+                $orderSlips[$idRestaurant] = new OrderSlip();
+                $arrayListOwnerId[] = $idRestaurant;
+            }
+
             $purchaseItem = new PurchaseItem();
             $purchaseItem->setRefProduct( $cartItem->getProduct());
             $purchaseItem->setName( $cartItem->getProduct()->getName());
@@ -74,9 +85,17 @@ class PurchaseController extends AbstractController
 
             $purchase->addPurchaseItem($purchaseItem);
 
+            $orderSlips[$idRestaurant]->addPurchaseItem($purchaseItem);
+            $orderSlips[$idRestaurant]->setPurchase($purchase);
+            $orderSlips[$idRestaurant]->setRestaurant($cartItem->getProduct()->getRestaurant());
+
+            $entityManager->persist($orderSlips[$idRestaurant]);
+
         }
 
+
         $purchase->setIdPurchase(date('Ymd').'#'.$purchase->getId());
+        #dd($purchase);
 
         $entityManager->persist($purchase);
         $entityManager->flush();
@@ -86,6 +105,9 @@ class PurchaseController extends AbstractController
 
         $entityManager->flush();
 
-        return new Response("Votre commande a bien été créé");
+        $response = new Response("Votre commande a bien été créé");
+        $response->headers->clearCookie("app_delifood_cart");
+
+        return $response;
     }
 }

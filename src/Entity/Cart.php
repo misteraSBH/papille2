@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Config\Definition\FloatNode;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=CartRepository::class)
@@ -25,9 +26,15 @@ class Cart
      */
     private $cartitems;
 
+    /**
+     * @ORM\Column(type="uuid", nullable=true)
+     */
+    private $uuid;
+
     public function __construct()
     {
         $this->cartitems = new ArrayCollection();
+        $this->uuid = Uuid::v4();
     }
 
     public function getId(): ?int
@@ -96,5 +103,17 @@ class Cart
 
         return $totalAmount;
 
+    }
+
+    public function getUuid()
+    {
+        return $this->uuid;
+    }
+
+    public function setUuid($uuid): self
+    {
+        $this->uuid = $uuid;
+
+        return $this;
     }
 }

@@ -44,6 +44,12 @@ class PurchaseItem
      */
     private $quantity;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=OrderSlip::class, inversedBy="purchaseItems")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $orderSlip;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +111,18 @@ class PurchaseItem
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getOrderSlip(): ?OrderSlip
+    {
+        return $this->orderSlip;
+    }
+
+    public function setOrderSlip(?OrderSlip $orderSlip): self
+    {
+        $this->orderSlip = $orderSlip;
 
         return $this;
     }

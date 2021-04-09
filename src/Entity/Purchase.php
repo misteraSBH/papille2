@@ -44,9 +44,15 @@ class Purchase
      */
     private $purchaseItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity=OrderSlip::class, mappedBy="purchase", orphanRemoval=true)
+     */
+    private $orderSlips;
+
     public function __construct()
     {
         $this->purchaseItems = new ArrayCollection();
+        $this->orderSlips = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,6 +132,36 @@ class Purchase
             // set the owning side to null (unless already changed)
             if ($purchaseItem->getPurchase() === $this) {
                 $purchaseItem->setPurchase(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|OrderSlip[]
+     */
+    public function getOrderSlips(): Collection
+    {
+        return $this->orderSlips;
+    }
+
+    public function addOrderSlip(OrderSlip $orderSlip): self
+    {
+        if (!$this->orderSlips->contains($orderSlip)) {
+            $this->orderSlips[] = $orderSlip;
+            $orderSlip->setPurchase($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrderSlip(OrderSlip $orderSlip): self
+    {
+        if ($this->orderSlips->removeElement($orderSlip)) {
+            // set the owning side to null (unless already changed)
+            if ($orderSlip->getPurchase() === $this) {
+                $orderSlip->setPurchase(null);
             }
         }
 

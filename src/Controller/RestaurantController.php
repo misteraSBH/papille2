@@ -19,6 +19,7 @@ use App\Repository\BeverageRepository;
 use App\Repository\DessertRepository;
 use App\Repository\DishRepository;
 use App\Repository\MenuRestaurantRepository;
+use App\Repository\PurchaseRepository;
 use App\Repository\RestaurantRepository;
 use App\Repository\SideDishRepository;
 use App\Service\ImageUploaderHelper;
@@ -647,10 +648,12 @@ class RestaurantController extends AbstractController
 
         $this->denyAccessUnlessGranted("EDIT_RESTAURANT", $restaurant);
 
-        /*return $this->render("restaurant/show_purchase.html.twig",[
-            'restaurant' => $restaurant,
-        ]);*/
-        return new Response();
+        $orderSlips = $restaurant->getOrderSlips();
+        #dd($purchases);
+        return $this->render("restaurant/list_orders.html.twig",[
+            'orderSlips' => $orderSlips,
+        ]);
+
     }
 }
 

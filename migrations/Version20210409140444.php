@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20210408140630 extends AbstractMigration
+final class Version20210409140444 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -20,12 +20,12 @@ final class Version20210408140630 extends AbstractMigration
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE purchase_item ADD quantity INT NOT NULL');
+        $this->addSql('ALTER TABLE cart ADD uuid BINARY(16) DEFAULT NULL COMMENT \'(DC2Type:uuid)\'');
     }
 
     public function down(Schema $schema) : void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE purchase_item DROP quantity');
+        $this->addSql('ALTER TABLE cart DROP uuid');
     }
 }
